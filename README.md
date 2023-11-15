@@ -1,0 +1,2 @@
+# gitpm
+Git project manager.
