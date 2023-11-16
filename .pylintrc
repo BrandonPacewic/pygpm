@@ -1,0 +1,7 @@
+# Copyright (c) Brandon Pacewic
+# SPDX-License-Identifier: MIT
+
+[MESSAGES CONTROL]
+# too-few-public-methods:
+#   Appears inside of util.Colors.
+disable=too-few-public-methods
