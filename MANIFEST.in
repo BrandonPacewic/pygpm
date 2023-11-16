@@ -1,0 +1,4 @@
+include gitpm/config/default.ini
+include COPYRIGHT.txt
+include LICENSE.txt
+include README.md

@@ -13,16 +13,26 @@ except ImportError:
 LONG_DESCRIPTION = open("README.md").read()
 VERSION = gitpm.__version__
 
-setuptools.setup(
-    name="gitpm",
-    version=VERSION,
-    author="Brandon Pacewic",
-    description="A git repository manager",
-    long_description_content_type="text/markdown",
-    long_description=LONG_DESCRIPTION,
-    license="MIT",
-    url="https://github.com/BrandonPacewic/gitpm",
-    packages=["gitpm"],
-    entry_points={"console_scripts": ["gitpm=gitpm.__main__:main"]},
-    python_requires=">=3.6",
-)
+def main() -> None:
+    setuptools.setup(
+        name="gitpm",
+        version=VERSION,
+        author="Brandon Pacewic",
+        description="A git repository manager",
+        long_description_content_type="text/markdown",
+        long_description=LONG_DESCRIPTION,
+        license="MIT",
+        url="https://github.com/BrandonPacewic/gitpm",
+        packages=["gitpm"],
+        entry_points={
+            "console_scripts": [
+                "gitpm=gitpm.__main__:main"
+            ]
+        },
+        python_requires=">=3.6",
+        include_package_data=True,
+    )
+
+
+if __name__ == "__main__":
+    main()
