@@ -24,7 +24,7 @@ class Config:
 
         self.config = configparser.ConfigParser()
         self.load()
-            
+
     def load(self) -> None:
         self.config.read_dict({
             "gitpm": {

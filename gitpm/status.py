@@ -5,11 +5,12 @@ import sys
 
 from . import util
 
+# TODO: Clean branching
 def print_status() -> None:
     try:
         status = util.read_command(["git", "status"])
-    except:
-        util.colored_print(util.Colors.RED, "Not a git repository")
+    except Exception as e:
+        util.colored_print(util.Colors.RED, f"Not a git repository: {e}")
         sys.exit(1)
 
     tokens = {}
@@ -36,7 +37,7 @@ def print_status() -> None:
                 else:
                     break
 
-    assert("on-branch" in tokens)
+    assert "on-branch" in tokens
 
     status_color = get_status_color(tokens)
     print(f"Branch: {tokens['on-branch']}")
@@ -53,7 +54,7 @@ def print_status() -> None:
 
     if not_staged_len > 0:
         util.multiline_colored_print(
-            status_color, 
+            status_color,
             [f"  {token}" for token in tokens["changes-not-staged-for-commit"]]
         )
         print()

@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: MIT
 
 import os
+import sys
 import subprocess
 import time
 
@@ -39,10 +40,10 @@ class Timer:
 
     def get_elapsed(self):
         try:
-            return str('{:.3f}'.format(self.tics[-1] - self.tics[-2]))
+            return f"{self.tics[-1] - self.tics[-2]:.3f}"
         except IndexError:
             print('Elapsed is null')
-            exit()
+            sys.exit(1)
 
 
 def read_file(input_file: str) -> List[str]:
