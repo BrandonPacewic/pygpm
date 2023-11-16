@@ -4,7 +4,7 @@
 import configparser
 import os
 
-from .settings import CONFIG_DIR, MODULE_DIR
+from .core import CONFIG_DIR, MODULE_DIR
 from . import util
 
 def create_default_config() -> None:

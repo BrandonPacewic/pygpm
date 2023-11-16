@@ -8,7 +8,7 @@ import time
 
 from typing import List
 
-from .settings import OS
+from .core import OS
 
 class Colors:
     GREEN = '\033[92m'

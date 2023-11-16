@@ -4,7 +4,7 @@
 import argparse
 import sys
 
-from .settings import __version__, CACHE_DIR, CONFIG_DIR
+from .core import __version__, CACHE_DIR, CONFIG_DIR
 from .config import Config
 from . import status
 
