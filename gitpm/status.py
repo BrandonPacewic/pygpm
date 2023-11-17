@@ -15,25 +15,23 @@ from . import util
 
 
 def parse_git_status() -> dict:
+    def index_next_t(start: int) -> int:
+        return util.find_next(status, start, lambda x: x.startswith("\t"))
+
     try:
         status = util.read_command(["git", "status"])
     except Exception as e:
         util.colored_print(util.Colors.RED, f"Not a git repository: {e}")
         sys.exit(1)
 
-    tokens = {}
+    tokens: dict[str, Any] = {}
     for i, line in enumerate(status):
         if line.startswith("On branch"):
             tokens["on-branch"] = line[10:]
 
         elif line.startswith("Changes not staged for commit:"):
             tokens["untracked-changes"] = []
-            for j in range(
-                    util.find_next(
-                        status,
-                        i,
-                        lambda x: x.startswith("\t")),
-                    len(status)):
+            for j in range(index_next_t(i), len(status)):
                 if status[j].startswith("\t"):
                     tokens["untracked-changes"].append(
                         f"{status[j][13:].strip()}")
@@ -42,12 +40,7 @@ def parse_git_status() -> dict:
 
         elif line.startswith("Untracked files:"):
             tokens["untracked-files"] = []
-            for j in range(
-                    util.find_next(
-                        status,
-                        i,
-                        lambda x: x.startswith("\t")),
-                    len(status)):
+            for j in range(index_next_t(i), len(status)):
                 if status[j].startswith("\t"):
                     tokens["untracked-files"].append(status[j].strip())
                 else:
@@ -55,12 +48,7 @@ def parse_git_status() -> dict:
 
         elif line.startswith("Changes to be committed:"):
             tokens["tracked-changes"] = []
-            for j in range(
-                    util.find_next(
-                        status,
-                        i,
-                        lambda x: x.startswith("\t")),
-                    len(status)):
+            for j in range(index_next_t(i), len(status)):
                 if status[j].startswith("\t"):
                     tokens["tracked-changes"].append(status[j].strip())
                 else:
@@ -69,13 +57,16 @@ def parse_git_status() -> dict:
     return tokens
 
 
-# TODO: Clean branching
 def print_status(config: Config) -> None:
-    def token_length(tokens: dict[str, List[Any]], token: str) -> int:
+    def get_token_length(token: str) -> int:
         try:
             return len(tokens[token])
         except KeyError:
             return 0
+
+    def print_tokens(tokens: List[str]) -> None:
+        for token in tokens:
+            util.colored_print(status_color, f"  {token}")
 
     tokens = parse_git_status()
     assert "on-branch" in tokens
@@ -83,7 +74,7 @@ def print_status(config: Config) -> None:
     status_color = get_status_color(tokens)
     print(f"Branch: {tokens['on-branch']}")
 
-    not_staged_len = token_length(tokens, "untracked-changes")
+    not_staged_len = get_token_length("untracked-changes")
     if not_staged_len > 0 or (
         not_staged_len == 0 and config.get(
             "status",
@@ -93,16 +84,10 @@ def print_status(config: Config) -> None:
             f" staged for commit{':' if not_staged_len > 0 else '.'}"
         )
 
-        try:
-            util.multiline_colored_print(
-                status_color,
-                [f"  {token}" for token in tokens["untracked-changes"]],
-                True,
-            )
-        except KeyError:
-            pass
+        if "untracked-changes" in tokens:
+            print_tokens(tokens["untracked-changes"])
 
-    not_tracked_len = token_length(tokens, "untracked-files")
+    not_tracked_len = get_token_length("untracked-files")
     if not_tracked_len > 0 or (
         not_tracked_len == 0 and config.get(
             "status",
@@ -112,16 +97,10 @@ def print_status(config: Config) -> None:
             f"{':' if not_tracked_len > 0 else '.'}"
         )
 
-        try:
-            util.multiline_colored_print(
-                status_color,
-                [f"  {token}" for token in tokens["untracked-files"]],
-                True,
-            )
-        except KeyError:
-            pass
+        if "untracked-files" in tokens:
+            print_tokens(tokens["untracked-files"])
 
-    staged_len = token_length(tokens, "tracked-changes")
+    staged_len = get_token_length("tracked-changes")
     if staged_len > 0 or (
         staged_len == 0 and config.get("status", "always_list_clean") == "true"
     ):
@@ -130,14 +109,8 @@ def print_status(config: Config) -> None:
             f"{':' if staged_len > 0 else '.'}"
         )
 
-        try:
-            util.multiline_colored_print(
-                status_color,
-                [f"  {token}" for token in tokens["tracked-changes"]],
-                True,
-            )
-        except KeyError:
-            pass
+        if "tracked-changes" in tokens:
+            print_tokens(tokens["tracked-changes"])
 
     if status_color == util.Colors.GREEN:
         util.colored_print(status_color, "Status: Clean")

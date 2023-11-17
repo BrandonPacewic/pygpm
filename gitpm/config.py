@@ -23,7 +23,7 @@ Config values for gitpm:
         Branch: main
         Status: clean
 """
-CONFIG_DICT = {
+CONFIG_DICT: dict[str, dict[str, str]] = {
     "status": {
         "always_list_clean": "true",
     }
