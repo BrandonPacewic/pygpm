@@ -8,11 +8,13 @@ from .core import __version__, CACHE_DIR, CONFIG_DIR
 from .config import Config
 from . import status
 
+
 def get_args() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("-v", "--version",
-                        action="version", version=f"gitpm {__version__}")
+    parser.add_argument(
+        "-v", "--version", action="version", version=f"gitpm {__version__}"
+    )
 
     parser.add_argument("action", nargs="+", help="Action to perform")
 
@@ -49,7 +51,7 @@ def main():
     action = args.action[0]
 
     if action == "status":
-        status.print_status()
+        status.print_status(config)
 
 
 if __name__ == "__main__":

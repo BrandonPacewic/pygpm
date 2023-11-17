@@ -13,6 +13,7 @@ except ImportError:
 LONG_DESCRIPTION = open("README.md").read()
 VERSION = gitpm.__version__
 
+
 def main() -> None:
     setuptools.setup(
         name="gitpm",

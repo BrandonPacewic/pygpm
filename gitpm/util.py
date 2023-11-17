@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: MIT
 
 import os
-import sys
 import subprocess
 import time
 
@@ -10,20 +9,26 @@ from typing import List
 
 from .core import OS
 
+
 class Colors:
-    GREEN = '\033[92m'
-    RED = '\033[91m'
-    YELLOW = '\033[93m'
-    END = '\033[0m'
+    GREEN = "\033[92m"
+    RED = "\033[91m"
+    YELLOW = "\033[93m"
+    END = "\033[0m"
 
 
 def colored_print(color: str, text: str) -> None:
     print(f"{color}{text}{Colors.END}")
 
 
-def multiline_colored_print(color: str, text: List[str]) -> None:
+def multiline_colored_print(
+    color: str, text: List[str], end_new_line: bool = False
+) -> None:
     for line in text:
         colored_print(color, line)
+
+    if end_new_line:
+        print()
 
 
 def multiline_print(text: List[str]) -> None:
@@ -32,18 +37,17 @@ def multiline_print(text: List[str]) -> None:
 
 
 class Timer:
-    def __init__(self):
+    def __init__(self) -> None:
         self.tics = [time.perf_counter()]
 
-    def add_tic(self):
+    def add_tic(self) -> None:
         self.tics.append(time.perf_counter())
 
-    def get_elapsed(self):
+    def get_elapsed(self) -> str:
         try:
             return f"{self.tics[-1] - self.tics[-2]:.3f}"
         except IndexError:
-            print('Elapsed is null')
-            sys.exit(1)
+            return "-0.000"
 
 
 def read_file(input_file: str) -> List[str]:

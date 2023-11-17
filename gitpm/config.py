@@ -7,11 +7,34 @@ import os
 from .core import CONFIG_DIR, MODULE_DIR
 from . import util
 
+"""
+Config values for gitpm:
+
+  status:
+    always_list_clean:
+      if 'true', 'gitpm status' will list categories even if they are empty
+      example:
+        Branch: main
+        Detected 0 files with changes not staged for commit.
+        Detected 0 untracked files.
+        Detected 0 files staged for commit.
+        Status: clean
+      vs.
+        Branch: main
+        Status: clean
+"""
+CONFIG_DICT = {
+    "status": {
+        "always_list_clean": "true",
+    }
+}
+
+
 def create_default_config() -> None:
     util.create_dir(CONFIG_DIR)
     util.copy_file(
         os.path.join(MODULE_DIR, "config/default.ini"),
-        os.path.join(CONFIG_DIR, "config.ini")
+        os.path.join(CONFIG_DIR, "config.ini"),
     )
 
 
@@ -26,12 +49,7 @@ class Config:
         self.load()
 
     def load(self) -> None:
-        self.config.read_dict({
-            "gitpm": {
-                "auto_refresh_on_dir_change": "false",
-            }
-        })
-
+        self.config.read_dict(CONFIG_DICT)
         self.config.read(self.config_path)
 
     def get(self, section: str, option: str) -> str:
