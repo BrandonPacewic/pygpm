@@ -6,6 +6,7 @@ by gitpm.
 # Copyright (c) Brandon Pacewic
 # SPDX-License-Identifier: MIT
 
+import os
 import sys
 
 from typing import Any, List
@@ -18,12 +19,7 @@ def parse_git_status() -> dict:
     def index_next_t(start: int) -> int:
         return find_next(status, start, lambda x: x.startswith("\t"))
 
-    try:
-        status = read_command(["git", "status"])
-    except Exception as e:
-        colored_print(Colors.RED, f"Not a git repository: {e}")
-        sys.exit(1)
-
+    status = read_command(["git", "status"])
     tokens: dict[str, Any] = {}
     for i, line in enumerate(status):
         if line.startswith("On branch"):

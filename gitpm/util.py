@@ -76,3 +76,7 @@ def find_next(tokens: List[str], start: int, condition: lambda x: bool) -> int:
             return i
 
     return -1
+
+
+def is_git_repository(directory: str) -> bool:
+    return os.path.isdir(os.path.join(directory, ".git"))

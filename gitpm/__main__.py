@@ -2,11 +2,13 @@
 # SPDX-License-Identifier: MIT
 
 import argparse
+import os
 import sys
 
-from gitpm.core import __version__, CACHE_DIR, CONFIG_DIR
+from gitpm.core import __version__
 from gitpm.config import Config
 from gitpm.status import print_status
+from gitpm.util import Colors, colored_print, is_git_repository
 
 
 def get_args() -> argparse.ArgumentParser:
@@ -34,6 +36,10 @@ def main():
     action = args.action[0]
 
     if action == "status":
+        if not is_git_repository(os.getcwd()):
+            colored_print(Colors.RED, "Not a git repository.")
+            sys.exit(1)
+
         print_status(config)
 
 
