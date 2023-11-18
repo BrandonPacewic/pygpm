@@ -4,8 +4,8 @@
 import configparser
 import os
 
-from .core import CONFIG_DIR, MODULE_DIR
-from . import util
+from gitpm.core import CONFIG_DIR, MODULE_DIR
+from gitpm.util import create_dir, copy_file
 
 """
 Config values for gitpm:
@@ -31,8 +31,8 @@ CONFIG_DICT: dict[str, dict[str, str]] = {
 
 
 def create_default_config() -> None:
-    util.create_dir(CONFIG_DIR)
-    util.copy_file(
+    create_dir(CONFIG_DIR)
+    copy_file(
         os.path.join(MODULE_DIR, "config/default.ini"),
         os.path.join(CONFIG_DIR, "config.ini"),
     )

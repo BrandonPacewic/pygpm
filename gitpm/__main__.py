@@ -4,9 +4,9 @@
 import argparse
 import sys
 
-from .core import __version__, CACHE_DIR, CONFIG_DIR
-from .config import Config
-from . import status
+from gitpm.core import __version__, CACHE_DIR, CONFIG_DIR
+from gitpm.config import Config
+from gitpm.status import print_status
 
 
 def get_args() -> argparse.ArgumentParser:
@@ -19,23 +19,6 @@ def get_args() -> argparse.ArgumentParser:
     parser.add_argument("action", nargs="+", help="Action to perform")
 
     return parser
-
-
-def parse_args(parser: argparse.ArgumentParser) -> None:
-    args = parser.parse_args()
-
-    if len(sys.argv) <= 1:
-        parser.print_help()
-        sys.exit(1)
-
-    action = args.action[0]
-
-    if action == "status":
-        status.print_status()
-
-    else:
-        parser.print_help()
-        sys.exit(1)
 
 
 def main():
@@ -51,7 +34,7 @@ def main():
     action = args.action[0]
 
     if action == "status":
-        status.print_status(config)
+        print_status(config)
 
 
 if __name__ == "__main__":

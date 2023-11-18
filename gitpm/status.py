@@ -10,18 +10,18 @@ import sys
 
 from typing import Any, List
 
-from .config import Config
-from . import util
+from gitpm.config import Config
+from gitpm.util import Colors, colored_print, find_next, read_command
 
 
 def parse_git_status() -> dict:
     def index_next_t(start: int) -> int:
-        return util.find_next(status, start, lambda x: x.startswith("\t"))
+        return find_next(status, start, lambda x: x.startswith("\t"))
 
     try:
-        status = util.read_command(["git", "status"])
+        status = read_command(["git", "status"])
     except Exception as e:
-        util.colored_print(util.Colors.RED, f"Not a git repository: {e}")
+        colored_print(Colors.RED, f"Not a git repository: {e}")
         sys.exit(1)
 
     tokens: dict[str, Any] = {}
@@ -66,7 +66,7 @@ def print_status(config: Config) -> None:
 
     def print_tokens(tokens: List[str]) -> None:
         for token in tokens:
-            util.colored_print(status_color, f"  {token}")
+            colored_print(status_color, f"  {token}")
 
     tokens = parse_git_status()
     assert "on-branch" in tokens
@@ -112,18 +112,18 @@ def print_status(config: Config) -> None:
         if "tracked-changes" in tokens:
             print_tokens(tokens["tracked-changes"])
 
-    if status_color == util.Colors.GREEN:
-        util.colored_print(status_color, "Status: Clean")
-    elif status_color == util.Colors.YELLOW:
+    if status_color == Colors.GREEN:
+        colored_print(status_color, "Status: Clean")
+    elif status_color == Colors.YELLOW:
         if "tracked-changes" not in tokens and config.get(
                 "status", "always_list_clean") == "true":
             print()
 
-        util.colored_print(status_color, "Status: Actions Suggested")
+        colored_print(status_color, "Status: Actions Suggested")
     else:
         # Will eventually be able to detect upstream changes and determine
         # if there are any conflicts.
-        util.colored_print(status_color, "Status: Unknown")
+        colored_print(status_color, "Status: Unknown")
 
 
 def get_status_color(tokens: dict) -> str:
@@ -132,6 +132,6 @@ def get_status_color(tokens: dict) -> str:
         or "untracked-files" in tokens
         or "tracked-changes" in tokens
     ):
-        return util.Colors.YELLOW
+        return Colors.YELLOW
 
-    return util.Colors.GREEN
+    return Colors.GREEN

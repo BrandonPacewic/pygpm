@@ -7,7 +7,7 @@ import time
 
 from typing import List
 
-from .core import OS
+from gitpm.core import OS
 
 
 class Colors:
