@@ -6,12 +6,14 @@ associated commands.
 # SPDX-License-Identifier: MIT
 
 import sys
+import shutil
+import textwrap
 
 from collections import namedtuple
 from importlib import import_module
 from functools import partial
-from optparse import Option, OptionGroup, OptionParser
-from typing import Callable, Optional, List
+from optparse import IndentedHelpFormatter, Option, OptionGroup, OptionParser
+from typing import Any, Callable, Optional, List
 
 from gitpm.core import __version__
 
@@ -52,13 +54,68 @@ COMMANDS_DICT: dict[str, CommandInfo] = {
 }
 
 
+class CustomIndentedHelpFormatter(IndentedHelpFormatter):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        kwargs["max_help_position"] = 30
+        kwargs["indent_increment"] = 1
+        kwargs["width"] = shutil.get_terminal_size()[0] - 2
+        super().__init__(*args, **kwargs)
+
+    def format_option_strings(self, option: Option) -> str:
+        opts = []
+
+        if option._short_opts:
+            opts.append(option._short_opts[0])
+
+        if option._long_opts:
+            opts.append(option._long_opts[0])
+
+        if len(opts) > 1:
+            opts.insert(1, ", ")
+
+        if option.takes_value():
+            metavar = option.metavar or option.dest.lower()
+            opts.append(f" <{metavar.lower()}>")
+
+        return "".join(opts)
+
+    def format_heading(self, heading: str) -> str:
+        if heading == "General Options":
+            return ""
+
+        return f"{heading}:\n"
+
+    def format_usage(self, usage: str) -> str:
+        return f"\nUsage: {self.indent_lines(textwrap.dedent(usage), ' ')}\n"
+
+    def format_description(self, description: str) -> str:
+        if not description:
+            return ""
+
+        description = description.lstrip("\n")
+        description = description.rstrip()
+        description = self.indent_lines(textwrap.dedent(description), "  ")
+        description = f"Commands:\n{description}\n"
+
+        return description
+
+    def format_epilog(self, epilog: str) -> str:
+        if epilog:
+            return epilog
+
+        return ""
+
+    def indent_lines(self, text: str, indent: str) -> str:
+        lines = [indent + line for line in text.splitlines()]
+        return "\n".join(lines)
+
+
 def create_main_parser() -> OptionParser:
     parser = OptionParser(
         usage="\n\tgitpm <command> [options]",
         add_help_option=False,  # Added manually.
         prog="gitpm",
-        # TODO: Make a custom indented help formatter.
-        # formatter=optparse.IndentedHelpFormatter(),
+        formatter=CustomIndentedHelpFormatter(),
     )
     parser.disable_interspersed_args()
 
@@ -70,8 +127,8 @@ def create_main_parser() -> OptionParser:
 
     parser.description = "\n".join(
         [""] + [
-            f"\t{command} {description}"
-            for command, description in COMMANDS_DICT.items()
+            f"\t{command} {info.description}"
+            for command, info in COMMANDS_DICT.items()
         ]
     )
 
