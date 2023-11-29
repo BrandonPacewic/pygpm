@@ -1,3 +1,6 @@
+"""gitpm - A git repository manager
+"""
+
 # Copyright (c) Brandon Pacewic
 # SPDX-License-Identifier: MIT
 

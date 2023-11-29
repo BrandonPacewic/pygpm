@@ -1,5 +1,4 @@
-"""
-Output the status of the current git repository or all repositories managed
+"""Output the status of the current git repository or all repositories managed
 by gitpm.
 """
 
@@ -9,7 +8,7 @@ by gitpm.
 from typing import Any, List
 
 from gitpm.config import CONFIG
-from gitpm.util import Colors, colored_print, find_next, read_command
+from gitpm.util import Colors, colored_print, find_next, read_command, is_git_repository
 
 
 def parse_git_status() -> dict[str, Any]:
@@ -60,6 +59,10 @@ def print_status() -> None:
     def print_tokens(tokens: List[str]) -> None:
         for token in tokens:
             colored_print(status_color, f"  {token}")
+
+    if not is_git_repository():
+        colored_print(Colors.RED, "Not a git repository.")
+        return
 
     tokens = parse_git_status()
     assert "on-branch" in tokens

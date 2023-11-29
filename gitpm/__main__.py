@@ -1,3 +1,6 @@
+"""gitpm - A git repository manager
+"""
+
 # Copyright (c) Brandon Pacewic
 # SPDX-License-Identifier: MIT
 
@@ -9,7 +12,7 @@ from gitpm.core import __version__
 from gitpm.parser import parse_command
 
 
-def main(args: List[str]=sys.argv[1:]) -> None:
+def main(args: List[str] = sys.argv[1:]) -> None:
     parse_command(args)
 
 

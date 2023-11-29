@@ -1,3 +1,6 @@
+"""Miscellaneous utility functions and classes for gitpm.
+"""
+
 # Copyright (c) Brandon Pacewic
 # SPDX-License-Identifier: MIT
 
@@ -78,5 +81,11 @@ def find_next(tokens: List[str], start: int, condition: lambda x: bool) -> int:
     return -1
 
 
-def is_git_repository(directory: str) -> bool:
-    return os.path.isdir(os.path.join(directory, ".git"))
+def is_git_repository(directory: str = os.getcwd()) -> bool:
+    while directory != ("C:\\" if OS == "Windows" else "/"):
+        if ".git" in os.listdir(directory):
+            return True
+
+        directory = os.path.dirname(directory)
+
+    return False

@@ -1,3 +1,6 @@
+"""Holds all configurable options for gitpm.
+"""
+
 # Copyright (c) Brandon Pacewic
 # SPDX-License-Identifier: MIT
 
@@ -46,9 +49,9 @@ class Config:
             create_default_config()
 
         self.config = configparser.ConfigParser()
-        self.load()
+        self._load()
 
-    def load(self) -> None:
+    def _load(self) -> None:
         self.config.read_dict(CONFIG_DICT)
         self.config.read(self.config_path)
 

@@ -1,3 +1,6 @@
+"""Core constants used throughout gitpm.
+"""
+
 # Copyright (c) Brandon Pacewic
 # SPDX-License-Identifier: MIT
 
