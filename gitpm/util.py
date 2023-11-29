@@ -8,7 +8,7 @@ import os
 import subprocess
 import time
 
-from typing import List
+from typing import Any, List
 
 from gitpm.core import OS
 
@@ -71,14 +71,6 @@ def copy_file(input_file: str, output_file: str) -> None:
 
 def read_command(command: List[str]) -> List[str]:
     return subprocess.check_output(command).decode("utf-8").splitlines()
-
-
-def find_next(tokens: List[str], start: int, condition: lambda x: bool) -> int:
-    for i in range(start, len(tokens)):
-        if condition(tokens[i]):
-            return i
-
-    return -1
 
 
 def is_git_repository(directory: str = os.getcwd()) -> bool:
