@@ -6,12 +6,9 @@ by gitpm.
 # Copyright (c) Brandon Pacewic
 # SPDX-License-Identifier: MIT
 
-import os
-import sys
-
 from typing import Any, List
 
-from gitpm.config import Config
+from gitpm.config import CONFIG
 from gitpm.util import Colors, colored_print, find_next, read_command
 
 
@@ -53,7 +50,7 @@ def parse_git_status() -> dict[str, Any]:
     return tokens
 
 
-def print_status(config: Config) -> None:
+def print_status() -> None:
     def get_token_length(token: str) -> int:
         try:
             return len(tokens[token])
@@ -72,7 +69,7 @@ def print_status(config: Config) -> None:
 
     not_staged_len = get_token_length("untracked-changes")
     if not_staged_len > 0 or (
-        not_staged_len == 0 and config.get(
+        not_staged_len == 0 and CONFIG.get(
             "status",
             "always_list_clean") == "true"):
         print(
@@ -85,7 +82,7 @@ def print_status(config: Config) -> None:
 
     not_tracked_len = get_token_length("untracked-files")
     if not_tracked_len > 0 or (
-        not_tracked_len == 0 and config.get(
+        not_tracked_len == 0 and CONFIG.get(
             "status",
             "always_list_clean") == "true"):
         print(
@@ -98,7 +95,7 @@ def print_status(config: Config) -> None:
 
     staged_len = get_token_length("tracked-changes")
     if staged_len > 0 or (
-        staged_len == 0 and config.get("status", "always_list_clean") == "true"
+        staged_len == 0 and CONFIG.get("status", "always_list_clean") == "true"
     ):
         print(
             f"Detected {staged_len} files staged for commit"
@@ -111,7 +108,7 @@ def print_status(config: Config) -> None:
     if status_color == Colors.GREEN:
         colored_print(status_color, "Status: Clean")
     elif status_color == Colors.YELLOW:
-        if "tracked-changes" not in tokens and config.get(
+        if "tracked-changes" not in tokens and CONFIG.get(
                 "status", "always_list_clean") == "true":
             print()
 

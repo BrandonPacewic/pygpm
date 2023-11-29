@@ -54,3 +54,6 @@ class Config:
 
     def get(self, section: str, option: str) -> str:
         return self.config.get(section, option)
+
+
+CONFIG = Config()
