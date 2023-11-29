@@ -8,7 +8,7 @@ import os
 import subprocess
 import time
 
-from typing import Any, List
+from typing import List
 
 from gitpm.core import OS
 
