@@ -23,7 +23,7 @@ def get_args() -> argparse.ArgumentParser:
     return parser
 
 
-def main():
+def main() -> None:
     config = Config()
 
     parser = get_args()

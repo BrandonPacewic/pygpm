@@ -15,7 +15,7 @@ from gitpm.config import Config
 from gitpm.util import Colors, colored_print, find_next, read_command
 
 
-def parse_git_status() -> dict:
+def parse_git_status() -> dict[str, Any]:
     def index_next_t(start: int) -> int:
         return find_next(status, start, lambda x: x.startswith("\t"))
 
