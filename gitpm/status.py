@@ -13,35 +13,22 @@ from gitpm.util import Colors, colored_print, read_command, is_git_repository
 
 def parse_git_status() -> dict[str, Any]:
     status = read_command(["git", "status", "--branch", "--porcelain"])
-    tokens: dict[str, Any] = {}
+    tokens: dict[str, Any] = {
+        "on-branch": None,
+        "untracked-changes": [],
+        "untracked-files": [],
+        "tracked-changes": [],
+    }
 
-    for i, line in enumerate(status):
+    for line in status:
         if line.startswith("##"):
             tokens["on-branch"] = line.split("...")[0][3:]
-
         elif line.startswith(" M"):
-            tokens["untracked-changes"] = []
-            for j in range(i - 1, len(status)):
-                if status[j].startswith(" M"):
-                    tokens["untracked-changes"].append(status[j][3:].strip())
-                else:
-                    break
-
-        elif line.startswith("??"):
-            tokens["untracked-files"] = []
-            for j in range(i - 1, len(status)):
-                if status[j].startswith("??"):
-                    tokens["untracked-files"].append(status[j][3:].strip())
-                else:
-                    break
-
+            tokens["untracked-changes"].append(line[3:].strip())
         elif line.startswith("M "):
-            tokens["tracked-changes"] = []
-            for j in range(i - 1, len(status)):
-                if status[j].startswith("M "):
-                    tokens["tracked-changes"].append(status[j][3:].strip())
-                else:
-                    break
+            tokens["tracked-changes"].append(line[3:].strip())
+        elif line.startswith("??"):
+            tokens["untracked-files"].append(line[3:].strip())
 
     return tokens
 
