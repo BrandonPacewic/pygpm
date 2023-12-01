@@ -5,6 +5,7 @@ associated commands.
 # Copyright (c) Brandon Pacewic
 # SPDX-License-Identifier: MIT
 
+import logging
 import sys
 import shutil
 import textwrap
@@ -17,6 +18,8 @@ from typing import Any, Callable, Optional, List
 
 from gitpm.core import __version__
 
+logger = logging.getLogger(__name__)
+
 # General options
 VERSION: Callable[..., Option] = partial(
     Option,
@@ -27,8 +30,40 @@ VERSION: Callable[..., Option] = partial(
     help="Show version number and exit."
 )
 
+VERBOSE: Callable[..., Option] = partial(
+    Option,
+    "-V",
+    "--verbose",
+    dest="verbose",
+    action="count",
+    default=0,
+    help="Increases output. Option is additive but functionally is capped at 1."
+)
+
+QUIET: Callable[..., Option] = partial(
+    Option,
+    "-q",
+    "--quiet",
+    dest="quiet",
+    action="count",
+    default=0,
+    help="Decreases output. Option is additive and can be used up to 3 times."
+)
+
+NO_COLOR: Callable[..., Option] = partial(
+    Option,
+    "--no-color",
+    dest="no_color",
+    action="store_true",
+    default=False,
+    help="Disables color output."
+)
+
 GENERAL_GROUP: List[Callable[..., Option]] = [
     VERSION,
+    VERBOSE,
+    QUIET,
+    NO_COLOR,
 ]
 
 
@@ -146,7 +181,6 @@ def parse_command(args: list[str]) -> Optional[int]:
     general_options, command_args = parser.parse_args(args)
 
     if general_options.version:
-        # TODO: Better print
         parser.print_version()
         sys.exit(0)
 
@@ -157,16 +191,14 @@ def parse_command(args: list[str]) -> Optional[int]:
 
     command = command_args[0]
 
-    # Suggest possibly intended command.
-    # TODO: Better print
     if command not in COMMANDS_DICT:
+        msg = [f"Unknown command '{command}'."]
         guess = get_similar_commands(command)
-        msg = [f"gitpm: '{command}' is not a gitpm command. See 'gitpm help'."]
 
         if guess:
-            msg.append(f"\nDid you mean '{guess}'?")
+            msg.append(f"Did you mean '{guess}'?")
 
-        print("\n".join(msg))
+        logger.critical("\n\n".join(msg))
         sys.exit(1)
 
     # TODO: Command class

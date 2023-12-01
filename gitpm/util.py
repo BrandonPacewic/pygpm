@@ -13,32 +13,6 @@ from typing import List
 from gitpm.core import OS
 
 
-class Colors:
-    GREEN = "\033[92m"
-    RED = "\033[91m"
-    YELLOW = "\033[93m"
-    END = "\033[0m"
-
-
-def colored_print(color: str, text: str) -> None:
-    print(f"{color}{text}{Colors.END}")
-
-
-def multiline_colored_print(
-    color: str, text: List[str], end_new_line: bool = False
-) -> None:
-    for line in text:
-        colored_print(color, line)
-
-    if end_new_line:
-        print()
-
-
-def multiline_print(text: List[str]) -> None:
-    for line in text:
-        print(line)
-
-
 class Timer:
     def __init__(self) -> None:
         self.tics = [time.perf_counter()]
