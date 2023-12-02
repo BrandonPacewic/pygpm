@@ -53,11 +53,21 @@ NO_COLOR: Callable[..., Option] = partial(
     help="Disables color output."
 )
 
+SHOW_TIME: Callable[..., Option] = partial(
+    Option,
+    "--show-time",
+    dest="show_time",
+    action="store_true",
+    default=False,
+    help="Show the message stamp in the log output."
+)
+
 GENERAL_GROUP: List[Callable[..., Option]] = [
     VERSION,
     VERBOSE,
     QUIET,
     NO_COLOR,
+    SHOW_TIME,
 ]
 
 

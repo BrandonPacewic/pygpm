@@ -44,6 +44,6 @@ class Command:
 
         self.verbosity = options.verbose - options.quiet
 
-        setup_logging(self.verbosity, options.no_color)
+        setup_logging(self.verbosity, options.no_color, options.show_time)
 
         self.run(options, args)

@@ -12,7 +12,7 @@ from typing import Any, cast
 
 Colors = Enum("Colors", ["GREEN", "RED", "BOLD_RED", "YELLOW", "END"])
 
-COLOR_PAIRS: dict[Colors, str] = {
+COLOR_CODES: dict[Colors, str] = {
     Colors.GREEN: "\033[92m",
     Colors.RED: "\033[91m",
     Colors.BOLD_RED: "\033[1;91m",
@@ -29,8 +29,8 @@ class ColoredLogger(logging.Logger):
             msg: str,
             *args: Any,
             **kwargs: Any) -> None:
-        color_code = COLOR_PAIRS[color]
-        color_end = COLOR_PAIRS[Colors.END]
+        color_code = COLOR_CODES[color]
+        color_end = COLOR_CODES[Colors.END]
         self.log(
             verbosity,
             f"{color_code}{msg}{color_end}",
@@ -77,6 +77,7 @@ class ColoredFormatter(logging.Formatter):
             no_color: bool = False,
             add_timestamp: bool = False,
             **kwargs: Any) -> None:
+        self.no_color = no_color
         self.add_timestamp = add_timestamp
         super().__init__(*args, **kwargs)
 
@@ -84,8 +85,25 @@ class ColoredFormatter(logging.Formatter):
         formatted = super().format(record)
         prefix = ""
 
+        # TODO: Improve performance by making a custom implementation of
+        # logging.logRecord
+        message_color = None
+
+        for color in Colors:
+            color_str = COLOR_CODES[color]
+
+            if formatted.startswith(color_str):
+                message_color = color_str
+                break
+
+        if self.no_color and message_color is not None:
+            formatted = formatted[len(message_color):]
+
         if self.add_timestamp:
-            prefix = f"{self.formatTime(record)} "
+            if message_color is not None:
+                prefix = f"{COLOR_CODES[Colors.END]}{self.formatTime(record)}{message_color} "
+            else:
+                prefix = f"{self.formatTime(record)} "
 
         formatted = "".join(
             [prefix + line for line in formatted.splitlines(True)])
@@ -95,7 +113,8 @@ class ColoredFormatter(logging.Formatter):
 # TODO: Add a logging file
 def setup_logging(
         verbosity: int = logging.NOTSET,
-        no_color: bool = False) -> None:
+        no_color: bool = False,
+        add_timestamp: bool = False) -> None:
     if verbosity >= 1:
         level_number = logging.DEBUG
     elif verbosity == -1:
@@ -120,6 +139,8 @@ def setup_logging(
             "colored": {
                 "()": ColoredFormatter,
                 "format": "%(message)s",
+                "no_color": no_color,
+                "add_timestamp": add_timestamp,
             },
         },
         "handlers": {
