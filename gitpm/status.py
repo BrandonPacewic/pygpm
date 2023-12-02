@@ -41,9 +41,8 @@ class StatusCommand(Command):
             suggested_actions = True
             logger.info(
                 f"Detected {len(tokens['untracked-files'])} untracked file(s):")
-            logger.colored_info(
-                Colors.RED,
-                "\n".join([f"\t{token}" for token in tokens["untracked-files"]]))
+            logger.colored_info(Colors.RED, "\n".join(
+                [f"\t{token}" for token in tokens["untracked-files"]]))
         elif list_clean:
             logger.info("No untracked files detected.")
 
@@ -52,9 +51,8 @@ class StatusCommand(Command):
             logger.info(
                 f"Detected {len(tokens['untracked-changes'])} file(s) "
                 "with changes not staged for commit:")
-            logger.colored_info(
-                Colors.YELLOW,
-                "\n".join([f"\t{token}" for token in tokens["untracked-changes"]]))
+            logger.colored_info(Colors.YELLOW, "\n".join(
+                [f"\t{token}" for token in tokens["untracked-changes"]]))
         elif list_clean:
             logger.info("No untracked changes detected.")
 
@@ -63,9 +61,8 @@ class StatusCommand(Command):
             logger.info(
                 f"Detected {len(tokens['tracked-changes'])} file(s) "
                 "staged for commit:")
-            logger.colored_info(
-                Colors.GREEN,
-                "\n".join([f"\t{token}" for token in tokens["tracked-changes"]]))
+            logger.colored_info(Colors.GREEN, "\n".join(
+                [f"\t{token}" for token in tokens["tracked-changes"]]))
         elif list_clean:
             logger.info("No staged changes detected.")
 
