@@ -144,7 +144,6 @@ def setup_logging(
 
 def init_logging() -> None:
     logging.setLoggerClass(ColoredLogger)
-    logging.addLevelName(logging.INFO, "COLORED")
 
 
 def get_logger(name: str) -> ColoredLogger:

@@ -10,7 +10,7 @@ import textwrap
 from collections import namedtuple
 from functools import partial
 from optparse import IndentedHelpFormatter, Option, OptionGroup, OptionParser
-from typing import Any, Callable, Optional, List, Tuple
+from typing import Any, Callable, List
 
 from gitpm.core import __version__
 

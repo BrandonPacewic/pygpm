@@ -13,7 +13,7 @@ from typing import Any
 from gitpm.config import CONFIG
 from gitpm.command import Command
 from gitpm.util import read_command, is_git_repository
-from gitpm.logging import Colors, get_logger, setup_logging
+from gitpm.logging import Colors, get_logger
 
 logger = get_logger(__name__)
 
@@ -25,60 +25,54 @@ class StatusCommand(Command):
 
     def run(self, options: Values, args: list[str]) -> None:
         # TODO: Expand to all repositories managed by gitpm.
-        print_status()
+        if not is_git_repository():
+            logger.colored_critical(Colors.BOLD_RED, "Not a git repository.")
+            sys.exit(1)
 
+        tokens = parse_git_status()
+        assert "on-branch" in tokens
 
-def print_status() -> None:
-    setup_logging()
+        logger.info(f"Branch: {tokens['on-branch']}")
 
-    if not is_git_repository():
-        logger.colored_critical(Colors.BOLD_RED, "Not a git repository.")
-        sys.exit(1)
+        suggested_actions = False
+        list_clean = CONFIG.get("status", "always_list_clean") == "true"
 
-    tokens = parse_git_status()
-    assert "on-branch" in tokens
+        if tokens["untracked-files"]:
+            suggested_actions = True
+            logger.info(
+                f"Detected {len(tokens['untracked-files'])} untracked file(s):")
+            logger.colored_info(
+                Colors.RED,
+                "\n".join([f"\t{token}" for token in tokens["untracked-files"]]))
+        elif list_clean:
+            logger.info("No untracked files detected.")
 
-    logger.info(f"Branch: {tokens['on-branch']}")
+        if tokens["untracked-changes"]:
+            suggested_actions = True
+            logger.info(
+                f"Detected {len(tokens['untracked-changes'])} file(s) "
+                "with changes not staged for commit:")
+            logger.colored_info(
+                Colors.YELLOW,
+                "\n".join([f"\t{token}" for token in tokens["untracked-changes"]]))
+        elif list_clean:
+            logger.info("No untracked changes detected.")
 
-    suggested_actions = False
-    list_clean = CONFIG.get("status", "always_list_clean") == "true"
+        if tokens["tracked-changes"]:
+            suggested_actions = True
+            logger.info(
+                f"Detected {len(tokens['tracked-changes'])} file(s) "
+                "staged for commit:")
+            logger.colored_info(
+                Colors.GREEN,
+                "\n".join([f"\t{token}" for token in tokens["tracked-changes"]]))
+        elif list_clean:
+            logger.info("No staged changes detected.")
 
-    if tokens["untracked-files"]:
-        suggested_actions = True
-        logger.info(
-            f"Detected {len(tokens['untracked-files'])} untracked file(s):")
-        logger.colored_info(
-            Colors.RED,
-            "\n".join([f"\t{token}" for token in tokens["untracked-files"]]))
-    elif list_clean:
-        logger.info("No untracked files detected.")
-
-    if tokens["untracked-changes"]:
-        suggested_actions = True
-        logger.info(
-            f"Detected {len(tokens['untracked-changes'])} file(s) "
-            "with changes not staged for commit:")
-        logger.colored_info(
-            Colors.YELLOW,
-            "\n".join([f"\t{token}" for token in tokens["untracked-changes"]]))
-    elif list_clean:
-        logger.info("No untracked changes detected.")
-
-    if tokens["tracked-changes"]:
-        suggested_actions = True
-        logger.info(
-            f"Detected {len(tokens['tracked-changes'])} file(s) "
-            "staged for commit:")
-        logger.colored_info(
-            Colors.GREEN,
-            "\n".join([f"\t{token}" for token in tokens["tracked-changes"]]))
-    elif list_clean:
-        logger.info("No staged changes detected.")
-
-    if suggested_actions:
-        logger.colored_info(Colors.YELLOW, "Status: Actions Suggested")
-    else:
-        logger.colored_info(Colors.GREEN, "Status: Clean")
+        if suggested_actions:
+            logger.colored_info(Colors.YELLOW, "Status: Actions Suggested")
+        else:
+            logger.colored_info(Colors.GREEN, "Status: Clean")
 
 
 def parse_git_status() -> dict[str, Any]:
