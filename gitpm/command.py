@@ -35,7 +35,7 @@ class Command:
 
     def run(self, options: Values, args: list[str]) -> None:
         raise NotImplementedError
-    
+
     def parse(self, args: list[str]) -> Tuple[Values, List[str]]:
         return self.parser.parse_args(args)
 
