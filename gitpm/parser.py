@@ -1,4 +1,4 @@
-"""Utility for parsing command line arguments throughout gitpm.j
+"""Utility for parsing command line arguments throughout gitpm.
 """
 
 # Copyright (c) Brandon Pacewic
