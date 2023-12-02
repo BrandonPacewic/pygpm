@@ -7,43 +7,25 @@ by gitpm.
 
 import sys
 
+from optparse import Values
 from typing import Any
 
 from gitpm.config import CONFIG
+from gitpm.command import Command
 from gitpm.util import read_command, is_git_repository
 from gitpm.logging import Colors, get_logger, setup_logging
 
 logger = get_logger(__name__)
 
 
-def parse_git_status() -> dict[str, Any]:
-    status = read_command(["git", "status", "--branch", "--porcelain"])
-    tokens: dict[str, Any] = {
-        "on-branch": None,
-        "untracked-changes": [],
-        "untracked-files": [],
-        "tracked-changes": [],
-    }
+class StatusCommand(Command):
+    def add_options(self) -> None:
+        # TODO
+        pass
 
-    for line in status:
-        if line.startswith("##"):
-            tokens["on-branch"] = line.split("...")[0][3:]
-        elif line.startswith(" M"):
-            tokens["untracked-changes"].append(line[3:].strip())
-        elif line.startswith("M "):
-            tokens["tracked-changes"].append(line[3:].strip())
-        elif line.startswith("??"):
-            tokens["untracked-files"].append(line[3:].strip())
-
-    if tokens["untracked-files"] and (tokens["untracked-changes"]
-                                      or tokens["tracked-changes"]):
-        tokens["untracked-files"].append("")
-
-    if tokens["untracked-changes"] and (tokens["tracked-changes"]
-                                        or CONFIG.get("status", "always_list_clean") == "true"):
-        tokens["untracked-changes"].append("")
-
-    return tokens
+    def run(self, options: Values, args: list[str]) -> None:
+        # TODO: Expand to all repositories managed by gitpm.
+        print_status()
 
 
 def print_status() -> None:
@@ -97,3 +79,33 @@ def print_status() -> None:
         logger.colored_info(Colors.YELLOW, "Status: Actions Suggested")
     else:
         logger.colored_info(Colors.GREEN, "Status: Clean")
+
+
+def parse_git_status() -> dict[str, Any]:
+    status = read_command(["git", "status", "--branch", "--porcelain"])
+    tokens: dict[str, Any] = {
+        "on-branch": None,
+        "untracked-changes": [],
+        "untracked-files": [],
+        "tracked-changes": [],
+    }
+
+    for line in status:
+        if line.startswith("##"):
+            tokens["on-branch"] = line.split("...")[0][3:]
+        elif line.startswith(" M"):
+            tokens["untracked-changes"].append(line[3:].strip())
+        elif line.startswith("M "):
+            tokens["tracked-changes"].append(line[3:].strip())
+        elif line.startswith("??"):
+            tokens["untracked-files"].append(line[3:].strip())
+
+    if tokens["untracked-files"] and (tokens["untracked-changes"]
+                                      or tokens["tracked-changes"]):
+        tokens["untracked-files"].append("")
+
+    if tokens["untracked-changes"] and (tokens["tracked-changes"]
+                                        or CONFIG.get("status", "always_list_clean") == "true"):
+        tokens["untracked-changes"].append("")
+
+    return tokens

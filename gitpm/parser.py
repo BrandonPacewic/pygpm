@@ -1,24 +1,18 @@
-"""Responsible for parsing all command line arguments and calling
-associated commands.
+"""Utility for parsing command line arguments throughout gitpm.j
 """
 
 # Copyright (c) Brandon Pacewic
 # SPDX-License-Identifier: MIT
 
-import logging
-import sys
 import shutil
 import textwrap
 
 from collections import namedtuple
-from importlib import import_module
 from functools import partial
 from optparse import IndentedHelpFormatter, Option, OptionGroup, OptionParser
-from typing import Any, Callable, Optional, List
+from typing import Any, Callable, Optional, List, Tuple
 
 from gitpm.core import __version__
-
-logger = logging.getLogger(__name__)
 
 # General options
 VERSION: Callable[..., Option] = partial(
@@ -75,14 +69,14 @@ def make_general_group(parser: OptionParser) -> OptionGroup:
     return group
 
 
-CommandInfo = namedtuple("CommandInfo", "module, function, description")
+CommandInfo = namedtuple("CommandInfo", "module, class_name, description")
 
 # Holds the module and function associated with each command. Helps avoid
 # costly unnecessary imports.
 COMMANDS_DICT: dict[str, CommandInfo] = {
     "status": CommandInfo(
         "gitpm.status",
-        "print_status",
+        "StatusCommand",
         "Show an enhanced status of the current git repository or the "
         "status of all repositories currently tracked by gitpm."
     ),
@@ -143,78 +137,3 @@ class CustomIndentedHelpFormatter(IndentedHelpFormatter):
     def indent_lines(self, text: str, indent: str) -> str:
         lines = [indent + line for line in text.splitlines()]
         return "\n".join(lines)
-
-
-def create_main_parser() -> OptionParser:
-    parser = OptionParser(
-        usage="\n\tgitpm <command> [options]",
-        add_help_option=False,  # Added manually.
-        prog="gitpm",
-        formatter=CustomIndentedHelpFormatter(),
-    )
-    parser.disable_interspersed_args()
-
-    general_options = make_general_group(parser)
-    parser.add_option_group(general_options)
-
-    parser.main = True
-    parser.version = __version__
-
-    parser.description = "\n".join(
-        [""] + [
-            f"\t{command} {info.description}"
-            for command, info in COMMANDS_DICT.items()
-        ]
-    )
-
-    return parser
-
-
-def parse_command(args: list[str]) -> Optional[int]:
-    parser = create_main_parser()
-
-    # NOTE: Parser calls `disable_interspersed_args()`, so the result
-    # will look like this:
-    #  args: ['--nocolor', 'status', '--help']
-    #  general_options: ['--nocolor']
-    #  command_args: ['status', '--help']
-    general_options, command_args = parser.parse_args(args)
-
-    if general_options.version:
-        parser.print_version()
-        sys.exit(0)
-
-    if not command_args or (
-            command_args[0] == "help" and len(command_args) == 1):
-        parser.print_help()
-        sys.exit(0)
-
-    command = command_args[0]
-
-    if command not in COMMANDS_DICT:
-        msg = [f"Unknown command '{command}'."]
-        guess = get_similar_commands(command)
-
-        if guess:
-            msg.append(f"Did you mean '{guess}'?")
-
-        logger.critical("\n\n".join(msg))
-        sys.exit(1)
-
-    # TODO: Command class
-    module_path, function_name, _ = COMMANDS_DICT[command]
-    module = import_module(module_path)
-    function = getattr(module, function_name)
-    function()
-
-
-def get_similar_commands(command: str) -> Optional[str]:
-    from difflib import get_close_matches
-
-    command = command.lower()
-    close_commands = get_close_matches(command, COMMANDS_DICT.keys())
-
-    if close_commands:
-        return close_commands[0]
-    else:
-        return None

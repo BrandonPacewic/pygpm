@@ -9,11 +9,13 @@ import sys
 from typing import List
 
 from gitpm.core import __version__
-from gitpm.parser import parse_command
+from gitpm.main_parser import create_command, parse_command
 
 
 def main(args: List[str] = sys.argv[1:]) -> None:
-    parse_command(args)
+    command_name, command_args = parse_command(args)
+    command = create_command(command_name)
+    command.main(command_args)
 
 
 if __name__ == "__main__":
