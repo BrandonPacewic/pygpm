@@ -14,6 +14,7 @@ from typing import Any, List, Optional, Tuple
 from gitpm.command import Command
 from gitpm.core import __version__
 from gitpm.parser import COMMANDS_DICT, CustomIndentedHelpFormatter, make_general_group
+from gitpm.util import get_gitpm_version
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +32,7 @@ def create_main_parser() -> OptionParser:
     parser.add_option_group(general_options)
 
     parser.main = True
-    parser.version = __version__
+    parser.version = get_gitpm_version()
 
     parser.description = "\n".join(
         [""] + [

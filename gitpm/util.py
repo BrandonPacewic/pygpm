@@ -5,12 +5,13 @@
 # SPDX-License-Identifier: MIT
 
 import os
+import sys
 import subprocess
 import time
 
 from typing import List
 
-from gitpm.core import OS
+from gitpm.core import OS, __version__
 
 
 class Timer:
@@ -55,3 +56,14 @@ def is_git_repository(directory: str = os.getcwd()) -> bool:
         directory = os.path.dirname(directory)
 
     return False
+
+
+def get_gitpm_version() -> str:
+    gitpm_pkg_dir = os.path.join(os.path.dirname(__file__), "..", "..")
+    gitpm_pkg_dir = os.path.abspath(gitpm_pkg_dir)
+
+    return f"gitpm {__version__} from {gitpm_pkg_dir} (python {get_python_major_minor_version()})"
+
+
+def get_python_major_minor_version() -> str:
+    return f"{sys.version_info.major}.{sys.version_info.minor}"
