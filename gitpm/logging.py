@@ -101,13 +101,17 @@ class ColoredFormatter(logging.Formatter):
 
         if self.add_timestamp:
             if message_color is not None:
-                prefix = f"{COLOR_CODES[Colors.END]}{self.formatTime(record)}{message_color} "
+                prefix = f"{COLOR_CODES[Colors.END]}{self.format_time(record)}{message_color} "
             else:
-                prefix = f"{self.formatTime(record)} "
+                prefix = f"{self.format_time(record)} "
 
         formatted = "".join(
             [prefix + line for line in formatted.splitlines(True)])
         return formatted
+
+    def format_time(self, record: logging.LogRecord) -> str:
+        time = super().formatTime(record)
+        return time.split(" ")[1][:-4]
 
 
 # TODO: Add a logging file
