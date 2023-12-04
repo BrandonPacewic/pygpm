@@ -100,7 +100,7 @@ class ColoredFormatter(logging.Formatter):
             formatted = formatted[len(message_color):]
 
         if self.add_timestamp:
-            if message_color is not None:
+            if message_color is not None and not self.no_color:
                 prefix = f"{COLOR_CODES[Colors.END]}{self.format_time(record)}{message_color} "
             else:
                 prefix = f"{self.format_time(record)} "
