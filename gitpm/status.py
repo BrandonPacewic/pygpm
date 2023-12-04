@@ -86,7 +86,7 @@ def parse_git_status() -> dict[str, Any]:
             tokens["on-branch"] = line.split("...")[0][3:]
         elif line.startswith(" M"):
             tokens["untracked-changes"].append(line[3:].strip())
-        elif line.startswith("M "):
+        elif line.startswith("M ") or line.startswith("A "):
             tokens["tracked-changes"].append(line[3:].strip())
         elif line.startswith("??"):
             tokens["untracked-files"].append(line[3:].strip())
