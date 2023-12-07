@@ -81,14 +81,24 @@ def make_general_group(parser: OptionParser) -> OptionGroup:
 
 CommandInfo = namedtuple("CommandInfo", "module, class_name, description")
 
-# Holds the module and function associated with each command. Helps avoid
-# costly unnecessary imports.
+# Holds the module and classes associated with each command. Helps avoid
+# costly unnecessary imports as individual command imports are done at runtime.
 COMMANDS_DICT: dict[str, CommandInfo] = {
     "status": CommandInfo(
         "gitpm.status",
         "StatusCommand",
         "Show an enhanced status of the current git repository or the "
         "status of all repositories currently tracked by gitpm."
+    ),
+    "track": CommandInfo(
+        "gitpm.track",
+        "TrackCommand",
+        "Add new git repositories for gitpm to track."
+    ),
+    "clean": CommandInfo(
+        "gitpm.clean",
+        "CleanCommand",
+        "Clean all data related to tracked repositories."
     ),
 }
 

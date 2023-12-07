@@ -8,10 +8,11 @@ import os
 import sys
 import subprocess
 import time
+import json
 
 from typing import List
 
-from gitpm.core import OS, __version__
+from gitpm.core import CACHE_DIR, OS, __version__
 
 
 class Timer:
@@ -28,9 +29,21 @@ class Timer:
             return "-0.000"
 
 
-def read_file(input_file: str) -> List[str]:
-    with open(input_file, "r") as file:
-        return file.read().splitlines()
+def make_file(new_file: str) -> None:
+    os.system(f"touch {new_file}")
+
+
+def read_file_json(input_file: str) -> dict:
+    try:
+        with open(input_file, "r") as file:
+            return json.load(file)
+    except json.decoder.JSONDecodeError:
+        return {}
+
+
+def write_file_json(output_file: str, data: dict) -> None:
+    with open(output_file, "w") as file:
+        json.dump(data, file, indent=4)
 
 
 def create_dir(directory: str) -> None:
@@ -67,3 +80,24 @@ def get_gitpm_version() -> str:
 
 def get_python_major_minor_version() -> str:
     return f"{sys.version_info.major}.{sys.version_info.minor}"
+
+
+REPO_CACHE_FILE = f"{CACHE_DIR}/repos.json"
+
+
+def cache_repo_data(name: str, author: str, url: str, path: str) -> None:
+    if not os.path.isfile(REPO_CACHE_FILE):
+        create_dir(CACHE_DIR)
+        make_file(REPO_CACHE_FILE)
+        data = {}
+    else:
+        data = read_file_json(REPO_CACHE_FILE)
+
+    data[name] = {"author": author, "url": url, "path": path}
+    write_file_json(REPO_CACHE_FILE, data)
+
+
+def clean_cached_data() -> None:
+    if os.path.isfile(REPO_CACHE_FILE):
+        with open(REPO_CACHE_FILE, "w") as file:
+            file.write("")
