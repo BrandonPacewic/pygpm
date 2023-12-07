@@ -19,9 +19,13 @@ logger = get_logger(__name__)
 
 
 class StatusCommand(Command):
-    def add_options(self) -> None:
-        # TODO
-        pass
+    """
+    Output status of current git repository or optionally list status of
+    all git repositories actively being tracked by gitpm.
+    """
+
+    usage = """
+      %prog [options]"""
 
     def run(self, options: Values, args: list[str]) -> None:
         # TODO: Expand to all repositories managed by gitpm.

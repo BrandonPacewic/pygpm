@@ -79,7 +79,7 @@ def make_general_group(parser: OptionParser) -> OptionGroup:
     return group
 
 
-CommandInfo = namedtuple("CommandInfo", "module, class_name, description")
+CommandInfo = namedtuple("CommandInfo", "module, class_name, summary")
 
 # Holds the module and classes associated with each command. Helps avoid
 # costly unnecessary imports as individual command imports are done at runtime.
@@ -100,6 +100,11 @@ COMMANDS_DICT: dict[str, CommandInfo] = {
         "CleanCommand",
         "Clean all data related to tracked repositories."
     ),
+    "help": CommandInfo(
+        "gitpm.help",
+        "HelpCommand",
+        "Display help information for commands."
+    )
 }
 
 
@@ -123,7 +128,7 @@ class CustomIndentedHelpFormatter(IndentedHelpFormatter):
             opts.insert(1, ", ")
 
         if option.takes_value():
-            metavar = option.metavar or option.dest.lower()
+            metavar = option.metavar or option.dest
             opts.append(f" <{metavar.lower()}>")
 
         return "".join(opts)
@@ -135,16 +140,23 @@ class CustomIndentedHelpFormatter(IndentedHelpFormatter):
         return f"{heading}:\n"
 
     def format_usage(self, usage: str) -> str:
-        return f"\nUsage: {self.indent_lines(textwrap.dedent(usage), ' ')}\n"
+        return f"\nUsage: {self.indent_lines(textwrap.dedent(usage), '  ')}\n"
 
     def format_description(self, description: str) -> str:
         if not description:
             return ""
 
+        # If TRUE then we are outputting help for the main parser
+        # else this help block is for a specific command.
+        if hasattr(self.parser, "main"):
+            label = "Commands"
+        else:
+            label = "Description"
+
         description = description.lstrip("\n")
         description = description.rstrip()
         description = self.indent_lines(textwrap.dedent(description), "  ")
-        description = f"Commands:\n{description}\n"
+        description = f"{label}:\n{description}\n"
 
         return description
 
@@ -155,5 +167,5 @@ class CustomIndentedHelpFormatter(IndentedHelpFormatter):
         return ""
 
     def indent_lines(self, text: str, indent: str) -> str:
-        lines = [indent + line for line in text.splitlines()]
+        lines = [f"{indent}{line}" for line in text.split("\n")]
         return "\n".join(lines)

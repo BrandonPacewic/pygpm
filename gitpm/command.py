@@ -12,12 +12,16 @@ from gitpm.logging import setup_logging
 
 
 class Command:
-    def __init__(self, name: str, description: str) -> None:
+    usage: str = ""
+
+    def __init__(self, name: str, summary: str) -> None:
         self.name = name
-        self.description = description
+        self.summary = summary
+
         self.parser = OptionParser(
             prog=f"gitpm {self.name}",
-            description=self.description,
+            usage=self.usage,
+            description=self.__doc__,
             formatter=CustomIndentedHelpFormatter(),
             add_help_option=False,
         )

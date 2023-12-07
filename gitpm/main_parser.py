@@ -36,7 +36,7 @@ def create_main_parser() -> OptionParser:
 
     parser.description = "\n".join(
         [""] + [
-            f"\t{command} {info.description}"
+            f"\t{command} {info.summary}"
             for command, info in COMMANDS_DICT.items()
         ]
     )
@@ -81,10 +81,10 @@ def parse_command(args: list[str]) -> Tuple[str, List[str]]:
 
 
 def create_command(name: str, **kwargs: Any) -> Command:
-    module_path, class_name, description = COMMANDS_DICT[name]
+    module_path, class_name, summary = COMMANDS_DICT[name]
     module = import_module(module_path)
     command_class = getattr(module, class_name)
-    command = command_class(name, description, **kwargs)
+    command = command_class(name, summary, **kwargs)
 
     return command
 

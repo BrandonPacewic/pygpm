@@ -17,6 +17,13 @@ logger = get_logger(__name__)
 
 
 class CleanCommand(Command):
+    """
+    Clean all tracked repository data from gitpm's cache.
+    """
+
+    usage = """
+      %prog [options]"""
+
     def run(self, options: Values, args: list[str]) -> None:
         if logger.getEffectiveLevel() <= logging.INFO:
             confirm = input(

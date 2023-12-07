@@ -20,6 +20,14 @@ logger = get_logger(__name__)
 
 
 class TrackCommand(Command):
+    """
+    Add a repository to be tracked globally by gitpm.
+    """
+
+    usage = """
+      %prog [options] <repository path> ...
+      %prog [options] -a <repositories root path> ..."""
+
     def add_options(self) -> None:
         self.cmd_options.add_option(
             "-a",
