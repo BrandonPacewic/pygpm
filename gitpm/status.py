@@ -41,6 +41,7 @@ class StatusCommand(Command):
             suggested_actions = True
             logger.info(
                 f"Detected {len(tokens['untracked-files'])} untracked file(s):")
+            tokens["untracked-files"].append("")
             logger.colored_info(Colors.RED, "\n".join(
                 [f"\t{token}" for token in tokens["untracked-files"]]))
         elif list_clean:
@@ -51,6 +52,7 @@ class StatusCommand(Command):
             logger.info(
                 f"Detected {len(tokens['untracked-changes'])} file(s) "
                 "with changes not staged for commit:")
+            tokens["untracked-changes"].append("")
             logger.colored_info(Colors.YELLOW, "\n".join(
                 [f"\t{token}" for token in tokens["untracked-changes"]]))
         elif list_clean:
@@ -61,6 +63,7 @@ class StatusCommand(Command):
             logger.info(
                 f"Detected {len(tokens['tracked-changes'])} file(s) "
                 "staged for commit:")
+            tokens["tracked-changes"].append("")
             logger.colored_info(Colors.GREEN, "\n".join(
                 [f"\t{token}" for token in tokens["tracked-changes"]]))
         elif list_clean:
@@ -90,13 +93,5 @@ def parse_git_status() -> dict[str, Any]:
             tokens["tracked-changes"].append(line[3:].strip())
         elif line.startswith("??"):
             tokens["untracked-files"].append(line[3:].strip())
-
-    if tokens["untracked-files"] and (tokens["untracked-changes"]
-                                      or tokens["tracked-changes"]):
-        tokens["untracked-files"].append("")
-
-    if tokens["untracked-changes"] and (tokens["tracked-changes"]
-                                        or CONFIG.get("status", "always_list_clean") == "true"):
-        tokens["untracked-changes"].append("")
 
     return tokens
