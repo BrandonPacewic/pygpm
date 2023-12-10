@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MIT
 
 """
-Functions for parsing the main gitpm command line arguments.
+Functions for parsing the main pygpm command line arguments.
 """
 
 import logging
@@ -13,19 +13,19 @@ from importlib import import_module
 from optparse import OptionParser
 from typing import Any, List, Optional, Tuple
 
-from gitpm.command import Command
-from gitpm.core import __version__
-from gitpm.parser import COMMANDS_DICT, CustomIndentedHelpFormatter, make_general_group
-from gitpm.util import get_gitpm_version
+from pygpm.command import Command
+from pygpm.core import __version__
+from pygpm.parser import COMMANDS_DICT, CustomIndentedHelpFormatter, make_general_group
+from pygpm.util import get_pygpm_version
 
 logger = logging.getLogger(__name__)
 
 
 def create_main_parser() -> OptionParser:
     parser = OptionParser(
-        usage="\n\tgitpm <command> [options]",
+        usage="\n\tpygpm <command> [options]",
         add_help_option=False,  # Added manually.
-        prog="gitpm",
+        prog="pygpm",
         formatter=CustomIndentedHelpFormatter(),
     )
     parser.disable_interspersed_args()
@@ -34,7 +34,7 @@ def create_main_parser() -> OptionParser:
     parser.add_option_group(general_options)
 
     parser.main = True
-    parser.version = get_gitpm_version()
+    parser.version = get_pygpm_version()
 
     parser.description = "\n".join(
         [""] + [

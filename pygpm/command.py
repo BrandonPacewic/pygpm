@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MIT
 
 """
-Base command class for all gitpm commands.
+Base command class for all pygpm commands.
 """
 
 import logging
@@ -10,9 +10,9 @@ import logging
 from optparse import OptionParser, OptionGroup, Values
 from typing import List, Tuple
 
-from gitpm.parser import CustomIndentedHelpFormatter, make_general_group
-from gitpm.logging import Colors, setup_logging, get_logger
-from gitpm.util import Timer
+from pygpm.parser import CustomIndentedHelpFormatter, make_general_group
+from pygpm.logging import Colors, setup_logging, get_logger
+from pygpm.util import Timer
 
 logger = get_logger(__name__)
 
@@ -27,7 +27,7 @@ class Command:
         self.verbosity = logging.INFO
 
         self.parser = OptionParser(
-            prog=f"gitpm {self.name}",
+            prog=f"pygpm {self.name}",
             usage=self.usage,
             description=self.__doc__,
             formatter=CustomIndentedHelpFormatter(),

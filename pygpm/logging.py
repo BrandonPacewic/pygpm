@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MIT
 
 """
-Customized logging for gitpm.
+Customized logging for pygpm.
 """
 
 import logging

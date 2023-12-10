@@ -2,23 +2,23 @@
 # SPDX-License-Identifier: MIT
 
 """
-Holds all configurable options for gitpm.
+Holds all configurable options for pygpm.
 """
 
 import configparser
 import os
 
-from gitpm.core import CONFIG_DIR, MODULE_DIR
-from gitpm.util import create_dir, copy_file
+from pygpm.core import CONFIG_DIR, MODULE_DIR
+from pygpm.util import create_dir, copy_file
 
 # TODO: Remove module
-# TODO: Move string to gitpm/config/default.ini
+# TODO: Move string to pygpm/config/default.ini
 """
-Config values for gitpm:
+Config values for pygpm:
 
   status:
     always_list_clean:
-      if 'true', 'gitpm status' will list categories even if they are empty
+      if 'true', 'pygpm status' will list categories even if they are empty
       example:
         Branch: main
         Detected 0 files with changes not staged for commit.

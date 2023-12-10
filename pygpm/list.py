@@ -9,16 +9,16 @@ import sys
 
 from optparse import Values
 
-from gitpm.command import Command
-from gitpm.logging import Colors, get_logger
-from gitpm.util import get_repository_cached_data
+from pygpm.command import Command
+from pygpm.logging import Colors, get_logger
+from pygpm.util import get_repository_cached_data
 
 logger = get_logger(__name__)
 
 
 class ListCommand(Command):
     """
-    List out the directory of all repositories tracked globally by gitpm.
+    List out the directory of all repositories tracked globally by pygpm.
     """
 
     usage = """
@@ -39,12 +39,12 @@ class ListCommand(Command):
         if data is None:
             logger.colored_critical(
                 Colors.BOLD_RED,
-                "gitpm found no tracked repositories.")
+                "pygpm found no tracked repositories.")
             sys.exit(1)
 
         if options.count:
             logger.info(
-                f"There are currently {len(data)} repositories tracked by gitpm.")
+                f"There are currently {len(data)} repositories tracked by pygpm.")
         else:
             for name, info in data.items():
                 logger.info(f"{name}: {info['path']}")

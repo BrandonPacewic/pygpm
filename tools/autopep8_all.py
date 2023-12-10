@@ -4,7 +4,7 @@
 import os
 
 FORMAT_COMMAND = "autopep8 --in-place --aggressive --aggressive"
-FILE_TARGETS = ["gitpm/*.py", "tools/*.py", "setup.py"]
+FILE_TARGETS = ["pygpm/*.py", "tools/*.py", "setup.py"]
 
 
 def main():

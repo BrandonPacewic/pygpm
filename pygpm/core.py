@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MIT
 
 """
-Core constants used throughout gitpm.
+Core constants used throughout pygpm.
 """
 
 import os
@@ -22,8 +22,8 @@ XDG_CONFIG_DIR = os.getenv(
         HOME if HOME is not None else "",
         ".config"))
 
-CACHE_DIR = os.getenv("GITPM_CACHE_DIR", os.path.join(XDG_CACHE_DIR, "gitpm"))
-CONFIG_DIR = os.path.join(XDG_CONFIG_DIR, "gitpm")
+CACHE_DIR = os.getenv("pygpm_CACHE_DIR", os.path.join(XDG_CACHE_DIR, "pygpm"))
+CONFIG_DIR = os.path.join(XDG_CONFIG_DIR, "pygpm")
 MODULE_DIR = os.path.dirname(__file__)
 
 OS = platform.uname()[0]

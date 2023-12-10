@@ -2,23 +2,23 @@
 # SPDX-License-Identifier: MIT
 
 """
-Clean all cached gitpm repository data.
+Clean all cached pygpm repository data.
 """
 
 import logging
 
 from optparse import Values
 
-from gitpm.command import Command
-from gitpm.logging import Colors, get_logger
-from gitpm.util import clean_cached_data
+from pygpm.command import Command
+from pygpm.logging import Colors, get_logger
+from pygpm.util import clean_cached_data
 
 logger = get_logger(__name__)
 
 
 class CleanCommand(Command):
     """
-    Clean all tracked repository data from gitpm's cache.
+    Clean all tracked repository data from pygpm's cache.
     """
 
     usage = """

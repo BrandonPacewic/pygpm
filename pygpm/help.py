@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MIT
 
 """
-Shows usage and help information for gitpm commands.
+Shows usage and help information for pygpm commands.
 """
 
 import sys
@@ -10,10 +10,10 @@ import sys
 from optparse import Values
 from typing import List
 
-from gitpm.command import Command
-from gitpm.parser import COMMANDS_DICT
-from gitpm.main_parser import create_command, get_similar_commands
-from gitpm.logging import get_logger
+from pygpm.command import Command
+from pygpm.parser import COMMANDS_DICT
+from pygpm.main_parser import create_command, get_similar_commands
+from pygpm.logging import get_logger
 
 logger = get_logger(__name__)
 
@@ -24,7 +24,7 @@ class HelpCommand(Command):
     """
 
     usage = """
-      %prog [options] <gitpm command>"""
+      %prog [options] <pygpm command>"""
 
     def run(self, options: Values, args: List[str]) -> None:
         command_name = args[0]

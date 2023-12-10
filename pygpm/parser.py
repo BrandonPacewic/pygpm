@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MIT
 
 """
-Utility for parsing command line arguments throughout gitpm.
+Utility for parsing command line arguments throughout pygpm.
 """
 
 import shutil
@@ -13,7 +13,7 @@ from functools import partial
 from optparse import IndentedHelpFormatter, Option, OptionGroup, OptionParser
 from typing import Any, Callable, List
 
-from gitpm.core import __version__
+from pygpm.core import __version__
 
 # General options
 VERSION: Callable[..., Option] = partial(
@@ -96,28 +96,28 @@ CommandInfo = namedtuple("CommandInfo", "module, class_name, summary")
 # costly unnecessary imports as individual command imports are done at runtime.
 COMMANDS_DICT: dict[str, CommandInfo] = {
     "status": CommandInfo(
-        "gitpm.status",
+        "pygpm.status",
         "StatusCommand",
         "Show an enhanced status of the current git repository or the "
-        "status of all repositories currently tracked by gitpm."
+        "status of all repositories currently tracked by pygpm."
     ),
     "track": CommandInfo(
-        "gitpm.track",
+        "pygpm.track",
         "TrackCommand",
-        "Add new git repositories for gitpm to track."
+        "Add new git repositories for pygpm to track."
     ),
     "clean": CommandInfo(
-        "gitpm.clean",
+        "pygpm.clean",
         "CleanCommand",
         "Clean all data related to tracked repositories."
     ),
     "help": CommandInfo(
-        "gitpm.help",
+        "pygpm.help",
         "HelpCommand",
         "Display help information for commands."
     ),
     "list": CommandInfo(
-        "gitpm.list",
+        "pygpm.list",
         "ListCommand",
         "List out the directory of all tracked git repositories."
     )

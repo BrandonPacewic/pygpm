@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MIT
 
 """
-Miscellaneous utility functions and classes for gitpm.
+Miscellaneous utility functions and classes for pygpm.
 """
 
 import os
@@ -13,7 +13,7 @@ import json
 
 from typing import Any, List, Optional
 
-from gitpm.core import CACHE_DIR, OS, __version__
+from pygpm.core import CACHE_DIR, OS, __version__
 
 
 class Timer:
@@ -76,11 +76,11 @@ def is_git_repository(directory: str = os.getcwd()) -> bool:
     return False
 
 
-def get_gitpm_version() -> str:
-    gitpm_pkg_dir = os.path.join(os.path.dirname(__file__), "..", "..")
-    gitpm_pkg_dir = os.path.abspath(gitpm_pkg_dir)
+def get_pygpm_version() -> str:
+    pygpm_pkg_dir = os.path.join(os.path.dirname(__file__), "..", "..")
+    pygpm_pkg_dir = os.path.abspath(pygpm_pkg_dir)
 
-    return f"gitpm {__version__} from {gitpm_pkg_dir} (python {get_python_major_minor_version()})"
+    return f"pygpm {__version__} from {pygpm_pkg_dir} (python {get_python_major_minor_version()})"
 
 
 def get_python_major_minor_version() -> str:

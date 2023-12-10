@@ -1,5 +1,5 @@
-include gitpm/config/default.ini
-include gitpm/**/*.py
+include pygpm/config/default.ini
+include pygpm/**/*.py
 include COPYRIGHT.txt
 include LICENSE.txt
 include README.md

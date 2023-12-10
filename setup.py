@@ -5,21 +5,21 @@ import setuptools
 import sys
 
 try:
-    import gitpm
+    import pygpm
 except ImportError:
-    print("Error importing gitpm.")
+    print("Error importing pygpm.")
     sys.exit(1)
 
 LONG_DESCRIPTION = open("README.md").read()
-VERSION = gitpm.__version__
+VERSION = pygpm.__version__
 
 
 def main() -> None:
     setuptools.setup(
-        name="gitpm",
+        name="pygpm",
         version=VERSION,
         author="Brandon Pacewic",
-        description="A git repository manager",
+        description="A git / github repository manager",
         long_description_content_type="text/markdown",
         long_description=LONG_DESCRIPTION,
         license="MIT",
@@ -27,11 +27,11 @@ def main() -> None:
             "Programming Language :: Python :: 3",
             "License :: OSI Approved :: MIT License"
         ],
-        url="https://github.com/BrandonPacewic/gitpm",
-        packages=["gitpm"],
+        url="https://github.com/BrandonPacewic/pygpm",
+        packages=["pygpm"],
         entry_points={
             "console_scripts": [
-                "gitpm=gitpm.__main__:main"
+                "gpm=pygpm.__main__:main"
             ]
         },
         python_requires=">=3.9",

@@ -3,7 +3,7 @@
 
 """
 Output the status of the current git repository or all repositories managed
-by gitpm.
+by pygpm.
 """
 
 import sys
@@ -12,10 +12,10 @@ import os
 from optparse import Values
 from typing import Any
 
-from gitpm.config import CONFIG
-from gitpm.command import Command
-from gitpm.util import read_command, is_git_repository, get_repository_cached_data
-from gitpm.logging import Colors, get_logger
+from pygpm.config import CONFIG
+from pygpm.command import Command
+from pygpm.util import read_command, is_git_repository, get_repository_cached_data
+from pygpm.logging import Colors, get_logger
 
 logger = get_logger(__name__)
 
@@ -23,7 +23,7 @@ logger = get_logger(__name__)
 class StatusCommand(Command):
     """
     Output status of current git repository or optionally list status of
-    all git repositories actively being tracked by gitpm.
+    all git repositories actively being tracked by pygpm.
     """
 
     usage = """
@@ -44,7 +44,7 @@ class StatusCommand(Command):
             action="store_true",
             dest="compact_all",
             default=False,
-            help="Show a condensed version of 'gitpm status --list-all'."
+            help="Show a condensed version of 'pygpm status --list-all'."
         )
 
     # TODO: Fix branching?
@@ -102,7 +102,7 @@ class StatusCommand(Command):
         if repositories is None:
             logger.colored_critical(
                 Colors.BOLD_RED,
-                "gitpm found no tracked repositories.")
+                "pygpm found no tracked repositories.")
             sys.exit(1)
 
         repository_status_tokens: dict[str, dict[str, Any]] = {}

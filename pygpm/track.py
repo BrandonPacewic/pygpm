@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MIT
 
 """
-Add new git repositories for gitpm to track.
+Add new git repositories for pygpm to track.
 """
 
 import sys
@@ -12,16 +12,16 @@ import os
 from optparse import Values
 from typing import Any
 
-from gitpm.command import Command
-from gitpm.logging import Colors, get_logger
-from gitpm.util import is_git_repository, cache_repo_data
+from pygpm.command import Command
+from pygpm.logging import Colors, get_logger
+from pygpm.util import is_git_repository, cache_repo_data
 
 logger = get_logger(__name__)
 
 
 class TrackCommand(Command):
     """
-    Add a repository to be tracked globally by gitpm.
+    Add a repository to be tracked globally by pygpm.
     """
 
     usage = """

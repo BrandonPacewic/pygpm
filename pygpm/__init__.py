@@ -2,11 +2,11 @@
 # SPDX-License-Identifier: MIT
 
 """
-gitpm - A git repository manager
+pygpm - A git / github repository manager
 """
 
-from gitpm.core import __version__
-from gitpm.logging import init_logging
+from pygpm.core import __version__
+from pygpm.logging import init_logging
 
 __all__ = ["__version__"]
 
