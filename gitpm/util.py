@@ -1,8 +1,9 @@
-"""Miscellaneous utility functions and classes for gitpm.
-"""
-
 # Copyright (c) Brandon Pacewic
 # SPDX-License-Identifier: MIT
+
+"""
+Miscellaneous utility functions and classes for gitpm.
+"""
 
 import os
 import sys

@@ -1,8 +1,9 @@
-"""Holds all configurable options for gitpm.
-"""
-
 # Copyright (c) Brandon Pacewic
 # SPDX-License-Identifier: MIT
+
+"""
+Holds all configurable options for gitpm.
+"""
 
 import configparser
 import os

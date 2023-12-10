@@ -1,9 +1,10 @@
-"""Output the status of the current git repository or all repositories managed
-by gitpm.
-"""
-
 # Copyright (c) Brandon Pacewic
 # SPDX-License-Identifier: MIT
+
+"""
+Output the status of the current git repository or all repositories managed
+by gitpm.
+"""
 
 import sys
 import os

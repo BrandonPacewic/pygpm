@@ -1,9 +1,9 @@
+# Copyright (c) Brandon Pacewic
+# SPDX-License-Identifier: MIT
+
 """
 Shows usage and help information for gitpm commands.
 """
-
-# Copyright (c) Brandon Pacewic
-# SPDX-License-Identifier: MIT
 
 import sys
 

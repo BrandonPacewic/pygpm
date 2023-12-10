@@ -1,9 +1,9 @@
+# Copyright (c) Brandon Pacewic
+# SPDX-License-Identifier: MIT
+
 """
 Clean all cached gitpm repository data.
 """
-
-# Copyright (c) Brandon Pacewic
-# SPDX-License-Identifier: MIT
 
 import logging
 

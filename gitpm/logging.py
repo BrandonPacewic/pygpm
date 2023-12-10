@@ -1,8 +1,9 @@
-"""Customized logging for gitpm.
-"""
-
 # Copyright (c) Brandon Pacewic
 # SPDX-License-Identifier: MIT
+
+"""
+Customized logging for gitpm.
+"""
 
 import logging
 import logging.config

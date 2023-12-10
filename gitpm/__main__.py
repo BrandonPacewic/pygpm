@@ -1,8 +1,9 @@
-"""gitpm - A git repository manager
-"""
-
 # Copyright (c) Brandon Pacewic
 # SPDX-License-Identifier: MIT
+
+"""
+gitpm - A git repository manager
+"""
 
 import sys
 

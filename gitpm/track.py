@@ -1,9 +1,9 @@
+# Copyright (c) Brandon Pacewic
+# SPDX-License-Identifier: MIT
+
 """
 Add new git repositories for gitpm to track.
 """
-
-# Copyright (c) Brandon Pacewic
-# SPDX-License-Identifier: MIT
 
 import sys
 import configparser

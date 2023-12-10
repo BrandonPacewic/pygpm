@@ -1,8 +1,9 @@
-"""Functions for parsing the main gitpm command line arguments.
-"""
-
 # Copyright (c) Brandon Pacewic
 # SPDX-License-Identifier: MIT
+
+"""
+Functions for parsing the main gitpm command line arguments.
+"""
 
 import logging
 import sys

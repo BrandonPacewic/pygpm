@@ -1,8 +1,9 @@
-"""Base command class for all gitpm commands.
-"""
-
 # Copyright (c) Brandon Pacewic
 # SPDX-License-Identifier: MIT
+
+"""
+Base command class for all gitpm commands.
+"""
 
 import logging
 
@@ -17,6 +18,7 @@ logger = get_logger(__name__)
 
 
 class Command:
+    # TODO: Move usage to init?
     usage: str = ""
 
     def __init__(self, name: str, summary: str) -> None:

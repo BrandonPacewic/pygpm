@@ -1,9 +1,9 @@
+# Copyright (c) Brandon Pacewic
+# SPDX-License-Identifier: MIT
+
 """
 List out the directory of all tracked git repositories.
 """
-
-# Copyright (c) Brandon Pacewic
-# SPDX-License-Identifier: MIT
 
 import sys
 

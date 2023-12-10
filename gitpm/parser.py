@@ -1,8 +1,9 @@
-"""Utility for parsing command line arguments throughout gitpm.
-"""
-
 # Copyright (c) Brandon Pacewic
 # SPDX-License-Identifier: MIT
+
+"""
+Utility for parsing command line arguments throughout gitpm.
+"""
 
 import shutil
 import textwrap
