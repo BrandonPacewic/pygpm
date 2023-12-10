@@ -45,10 +45,10 @@ class TrackCommand(Command):
 
         if options.add_all:
             for arg in args:
-                for x in os.listdir(arg):
-                    if os.path.isdir(x) and is_git_repository(x):
-                        logger.debug(f"Caching {os.path.abspath(x)}...")
-                        self.make_and_cache_data(x)
+                for dir in os.listdir(arg):
+                    if os.path.isdir(dir) and is_git_repository(dir):
+                        logger.debug(f"Caching {os.path.abspath(dir)}...")
+                        make_and_cache_data(dir)
         else:
             for arg in args:
                 arg = os.path.abspath(arg)
@@ -62,13 +62,13 @@ class TrackCommand(Command):
                         Colors.BOLD_RED, f"{arg} is not a valid git repository.")
                     sys.exit(1)
 
-                self.make_and_cache_data(arg)
+                make_and_cache_data(arg)
 
-    @staticmethod
-    def make_and_cache_data(dir: str) -> None:
-        repo_dir = os.path.abspath(dir)
-        data = extract_repository_data(repo_dir)
-        cache_repo_data(**data)
+
+def make_and_cache_data(dir: str) -> None:
+    repo_dir = os.path.abspath(dir)
+    data = extract_repository_data(repo_dir)
+    cache_repo_data(**data)
 
 
 def extract_repository_data(repo_dir: str) -> dict[str, Any]:

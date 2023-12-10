@@ -62,12 +62,22 @@ SHOW_TIME: Callable[..., Option] = partial(
     help="Show the message stamp in the log output."
 )
 
+TIME_COMMAND: Callable[..., Option] = partial(
+    Option,
+    "--time-command",
+    dest="time_command",
+    action="store_true",
+    default=False,
+    help="Adds a timer onto tho selected command and displays the total command runtime."
+)
+
 GENERAL_GROUP: List[Callable[..., Option]] = [
     VERSION,
     VERBOSE,
     QUIET,
     NO_COLOR,
     SHOW_TIME,
+    TIME_COMMAND
 ]
 
 
@@ -104,6 +114,11 @@ COMMANDS_DICT: dict[str, CommandInfo] = {
         "gitpm.help",
         "HelpCommand",
         "Display help information for commands."
+    ),
+    "list": CommandInfo(
+        "gitpm.list",
+        "ListCommand",
+        "List out the directory of all tracked git repositories."
     )
 }
 
@@ -129,7 +144,9 @@ class CustomIndentedHelpFormatter(IndentedHelpFormatter):
 
         if option.takes_value():
             metavar = option.metavar or option.dest
-            opts.append(f" <{metavar.lower()}>")
+
+            if metavar is not None:
+                opts.append(f" <{metavar.lower()}>")
 
         return "".join(opts)
 

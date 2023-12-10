@@ -10,7 +10,7 @@ import subprocess
 import time
 import json
 
-from typing import List
+from typing import Any, List, Optional
 
 from gitpm.core import CACHE_DIR, OS, __version__
 
@@ -33,7 +33,7 @@ def make_file(new_file: str) -> None:
     os.system(f"touch {new_file}")
 
 
-def read_file_json(input_file: str) -> dict:
+def read_file_json(input_file: str) -> dict[str, dict[str, Any]]:
     try:
         with open(input_file, "r") as file:
             return json.load(file)
@@ -57,11 +57,15 @@ def copy_file(input_file: str, output_file: str) -> None:
         os.system(f"cp {input_file} {output_file}")
 
 
-def read_command(command: List[str]) -> List[str]:
-    return subprocess.check_output(command).decode("utf-8").splitlines()
+def read_command(command: str, command_dir: str = os.getcwd()) -> List[str]:
+    return subprocess.check_output(
+        command.split(" "),
+        cwd=command_dir).decode("utf-8").splitlines()
 
 
 def is_git_repository(directory: str = os.getcwd()) -> bool:
+    # TODO: Potential problem with checking the status of a repository not
+    # on drive c on windows.
     while directory != ("C:\\" if OS == "Windows" else "/"):
         if ".git" in os.listdir(directory):
             return True
@@ -83,6 +87,15 @@ def get_python_major_minor_version() -> str:
 
 
 REPO_CACHE_FILE = f"{CACHE_DIR}/repos.json"
+
+
+def get_repository_cached_data() -> Optional[dict[str, dict[str, Any]]]:
+    data = read_file_json(REPO_CACHE_FILE)
+
+    if len(data):
+        return data
+    else:
+        return None
 
 
 def cache_repo_data(name: str, author: str, url: str, path: str) -> None:

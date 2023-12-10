@@ -8,7 +8,10 @@ from optparse import OptionParser, OptionGroup, Values
 from typing import List, Tuple
 
 from gitpm.parser import CustomIndentedHelpFormatter, make_general_group
-from gitpm.logging import setup_logging
+from gitpm.logging import Colors, setup_logging, get_logger
+from gitpm.util import Timer
+
+logger = get_logger(__name__)
 
 
 class Command:
@@ -50,4 +53,12 @@ class Command:
 
         setup_logging(self.verbosity, options.no_color, options.show_time)
 
+        if options.time_command:
+            command_timer = Timer()
+
         self.run(options, args)
+
+        if options.time_command:
+            command_timer.add_tic()
+            logger.colored_info(Colors.YELLOW,
+                                f"Run time: {command_timer.get_elapsed()}s")
