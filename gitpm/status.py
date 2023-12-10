@@ -46,6 +46,7 @@ class StatusCommand(Command):
             help="Show a condensed version of 'gitpm status --list-all'."
         )
 
+    # TODO: Fix branching?
     def run(self, options: Values, args: list[str]) -> None:
         if is_git_repository() and not options.list_all and not options.compact_all:
             tokens = parse_git_status()

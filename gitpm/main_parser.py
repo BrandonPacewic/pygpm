@@ -7,6 +7,7 @@
 import logging
 import sys
 
+from difflib import get_close_matches
 from importlib import import_module
 from optparse import OptionParser
 from typing import Any, List, Optional, Tuple
@@ -90,12 +91,10 @@ def create_command(name: str, **kwargs: Any) -> Command:
 
 
 def get_similar_commands(command: str) -> Optional[str]:
-    from difflib import get_close_matches
-
     command = command.lower()
     close_commands = get_close_matches(command, COMMANDS_DICT.keys())
 
     if close_commands:
         return close_commands[0]
-    else:
-        return None
+
+    return None

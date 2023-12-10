@@ -2,4 +2,9 @@
 # SPDX-License-Identifier: MIT
 
 [MESSAGES CONTROL]
-disable=too-few-public-methods,deprecated-module
+disable=too-few-public-methods,
+        deprecated-module,
+        missing-class-docstring,
+        missing-function-docstring,
+        redefined-builtin,
+        protected-access

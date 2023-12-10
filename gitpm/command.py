@@ -4,6 +4,8 @@
 # Copyright (c) Brandon Pacewic
 # SPDX-License-Identifier: MIT
 
+import logging
+
 from optparse import OptionParser, OptionGroup, Values
 from typing import List, Tuple
 
@@ -20,6 +22,7 @@ class Command:
     def __init__(self, name: str, summary: str) -> None:
         self.name = name
         self.summary = summary
+        self.verbosity = logging.INFO
 
         self.parser = OptionParser(
             prog=f"gitpm {self.name}",

@@ -35,14 +35,14 @@ def make_file(new_file: str) -> None:
 
 def read_file_json(input_file: str) -> dict[str, dict[str, Any]]:
     try:
-        with open(input_file, "r") as file:
+        with open(input_file, "r", encoding="utf-8") as file:
             return json.load(file)
     except json.decoder.JSONDecodeError:
         return {}
 
 
 def write_file_json(output_file: str, data: dict) -> None:
-    with open(output_file, "w") as file:
+    with open(output_file, "w", encoding="utf-8") as file:
         json.dump(data, file, indent=4)
 
 
@@ -94,8 +94,8 @@ def get_repository_cached_data() -> Optional[dict[str, dict[str, Any]]]:
 
     if len(data):
         return data
-    else:
-        return None
+
+    return None
 
 
 def cache_repo_data(name: str, author: str, url: str, path: str) -> None:
@@ -112,5 +112,5 @@ def cache_repo_data(name: str, author: str, url: str, path: str) -> None:
 
 def clean_cached_data() -> None:
     if os.path.isfile(REPO_CACHE_FILE):
-        with open(REPO_CACHE_FILE, "w") as file:
+        with open(REPO_CACHE_FILE, "w", encoding="utf-8") as file:
             file.write("")

@@ -10,6 +10,8 @@ import os
 from gitpm.core import CONFIG_DIR, MODULE_DIR
 from gitpm.util import create_dir, copy_file
 
+# TODO: Remove module
+# TODO: Move string to gitpm/config/default.ini
 """
 Config values for gitpm:
 
