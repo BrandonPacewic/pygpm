@@ -1,6 +1,6 @@
 # :open_file_folder: Git Project Manager
 
-A cross platform tool for managing a large number of git projects from the command line.
+A cross platform tool for managing a large number of GitHub projects from the command line.
 
 ## Features
 

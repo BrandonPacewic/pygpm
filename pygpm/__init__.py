@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MIT
 
 """
-pygpm - A git / github repository manager
+pygpm - A GitHub repository manager
 """
 
 from pygpm.core import __version__

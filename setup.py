@@ -19,7 +19,7 @@ def main() -> None:
         name="pygpm",
         version=VERSION,
         author="Brandon Pacewic",
-        description="A git / github repository manager",
+        description="A GitHub repository manager",
         long_description_content_type="text/markdown",
         long_description=LONG_DESCRIPTION,
         license="MIT",
