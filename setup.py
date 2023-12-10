@@ -10,18 +10,21 @@ except ImportError:
     print("Error importing pygpm.")
     sys.exit(1)
 
-LONG_DESCRIPTION = open("README.md").read()
-VERSION = pygpm.__version__
+with open("README.md", "r", encoding="utf-8") as file:
+    long_description = file.read()
+
+    # Remove folder icon from pypi package readme.
+    long_description = long_description[:19]
 
 
 def main() -> None:
     setuptools.setup(
         name="pygpm",
-        version=VERSION,
+        version=pygpm.__version__,
         author="Brandon Pacewic",
         description="A GitHub repository manager",
         long_description_content_type="text/markdown",
-        long_description=LONG_DESCRIPTION,
+        long_description=long_description,
         license="MIT",
         classifiers=[
             "Programming Language :: Python :: 3",
