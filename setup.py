@@ -23,6 +23,10 @@ def main() -> None:
         long_description_content_type="text/markdown",
         long_description=LONG_DESCRIPTION,
         license="MIT",
+        classifiers=[
+            "Programming Language :: Python :: 3",
+            "License :: OSI Approved :: MIT License"
+        ],
         url="https://github.com/BrandonPacewic/gitpm",
         packages=["gitpm"],
         entry_points={
@@ -30,7 +34,15 @@ def main() -> None:
                 "gitpm=gitpm.__main__:main"
             ]
         },
-        python_requires=">=3.6",
+        python_requires=">=3.9",
+        extras_require={
+            "git": ["git"],
+            "github cli": ["gh"],
+            "linting": [
+                "pylint",
+                "mypy",
+            ],
+        },
         include_package_data=True,
     )
 
