@@ -13,7 +13,13 @@ A cross platform tool for managing a large number of GitHub projects from the co
 
 ## Install
 
-Currently to install pygpm it is required that you clone the repository on your local machine.
+Git Project Manager can be installed from pip or your choice of a python packaging tool:
+
+```
+python3 -m pip install pygpm
+```
+
+Or optionally install pygpm from source:
 
 ```
 git clone https://github.com/BrandonPacewic/pygpm.git
