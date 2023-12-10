@@ -14,7 +14,7 @@ with open("README.md", "r", encoding="utf-8") as file:
     long_description = file.read()
 
     # Remove folder icon from pypi package readme.
-    long_description = long_description[:19]
+    long_description = long_description[19:]
 
 
 def main() -> None:
