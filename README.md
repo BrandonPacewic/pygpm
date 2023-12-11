@@ -11,6 +11,9 @@ A cross platform tool for managing a large number of GitHub projects from the co
 - Start using it at your own pace:
   - pygpm has the ability to grab all of the git repositories on your computer, but you don't need to do that if you don't want to. Track one repository at a time and see how it goes. Note that the true power of pygpm comes from using it for a massive amount of projects.
 
+> [!NOTE]
+> This project is still under development and the behaviour of the above described features will likely change drastically in the near future.
+
 ## Install
 
 Git Project Manager can be installed from pip or your choice of a python packaging tool:
