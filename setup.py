@@ -40,7 +40,6 @@ def main() -> None:
         python_requires=">=3.9",
         extras_require={
             "git": ["git"],
-            "github cli": ["gh"],
             "linting": [
                 "pylint",
                 "mypy",

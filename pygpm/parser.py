@@ -120,7 +120,7 @@ COMMANDS_DICT: dict[str, CommandInfo] = {
         "pygpm.list",
         "ListCommand",
         "List out the directory of all tracked git repositories."
-    )
+    ),
 }
 
 

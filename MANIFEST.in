@@ -1,5 +1,7 @@
 include pygpm/config/default.ini
 include pygpm/**/*.py
+include .pylintrc
+include mypy.ini
 include COPYRIGHT.txt
 include LICENSE.txt
 include README.md

@@ -8,7 +8,7 @@ Core constants used throughout pygpm.
 import os
 import platform
 
-__version__ = "0.1.4"
+__version__ = "0.1.dev5"
 
 HOME = os.getenv("HOME", os.getenv("USERPROFILE"))
 XDG_CACHE_DIR = os.getenv(
