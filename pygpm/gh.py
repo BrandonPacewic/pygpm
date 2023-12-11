@@ -51,6 +51,7 @@ class License:
     html_url: str
 
 
+# TODO: Redo init
 @dataclass
 class Repository:
     id: int
@@ -140,6 +141,7 @@ class Repository:
     watchers: int
 
 
+# TODO: Redo init
 @dataclass
 class Head:
     label: str
@@ -149,6 +151,7 @@ class Head:
     repo: Repository
 
 
+# TODO: Redo init
 @dataclass
 class Base:
     label: str
@@ -186,6 +189,7 @@ class Label:
     default: bool
 
 
+# TODO: Redo init
 @dataclass
 class Milestone:
     url: str
@@ -206,19 +210,21 @@ class Milestone:
     due_on: str
 
 
+# TODO: Redo init
 @dataclass
 class PR:
     url: str
     id: int
     node_id: str
     html_url: str
+    diff_url: str
     patch_url: str
     issue_url: str
     commits_url: str
     review_comments_url: str
     review_comment_url: str
     comments_url: str
-    statuses: str
+    statuses_url: str
     number: int
     state: str
     locked: bool
