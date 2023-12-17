@@ -11,9 +11,6 @@ from typing import Any, List
 
 from pygpm.config import CONFIG
 from pygpm.gh_classes import PR, Issue
-from pygpm.logging import get_logger
-
-logger = get_logger(__name__)
 
 
 def get_access_token() -> str:

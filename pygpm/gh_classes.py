@@ -93,7 +93,7 @@ class _Repository:
     hooks_url: str
     svn_url: str
     homepage: str
-    language: Any
+    language: Any  # TODO: Check type
     forks_count: int
     stargazers_count: int
     watchers_count: int
@@ -179,7 +179,7 @@ class Team:
     notification_setting: str
     members_url: str
     repositories_url: str
-    parent: Any
+    parent: Any  # TODO: Check type
 
 
 @dataclass
@@ -245,7 +245,7 @@ class _PR:
     merge_commit_sha: str
     _links: dict[str, dict[str, str]]
     author_association: str
-    auto_merge: Any
+    auto_merge: Any  # TODO: Check type
     draft: bool
 
 
