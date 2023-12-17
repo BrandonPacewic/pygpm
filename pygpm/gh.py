@@ -8,15 +8,12 @@ GitHub API integration for pygpm.
 import requests
 
 from dataclasses import dataclass
-from optparse import Values
 from typing import Any, List
 
 from pygpm.config import CONFIG
-from pygpm.command import Command
+from pygpm.logging import get_logger
 
-
-class URL(str):
-    pass
+logger = get_logger(__name__)
 
 
 @dataclass
@@ -48,23 +45,21 @@ class License:
     url: str
     spdx_id: str
     node_id: str
-    html_url: str
 
 
-# TODO: Redo init
 @dataclass
-class Repository:
+class _Repository:
     id: int
     node_id: str
     name: str
     full_name: str
-    owner: User
     private: bool
     html_url: str
     description: str
     fork: bool
     url: str
     archive_url: str
+    assignees_url: str
     blobs_url: str
     branches_url: str
     collaborators_url: str
@@ -122,43 +117,59 @@ class Repository:
     archived: bool
     disabled: bool
     visibility: str
+    created_at: str
     pushed_at: str
-    crated_at: str
     updated_at: str
-    permissions: dict[str, bool]
-    allow_rebase_merge: bool
-    template_repository: Any
-    temp_clone_token: str
-    allow_squash_merge: bool
-    allow_auto_merge: bool
-    delete_branch_on_merge: bool
-    allow_merge_commit: bool
-    subscribers_count: int
-    network_count: int
-    license: License
     forks: int
     open_issues: int
     watchers: int
+    has_discussions: bool
+    allow_forking: bool
+    web_commit_signoff_required: bool
 
 
-# TODO: Redo init
+class Repository(_Repository):
+    def __init__(self, owner: dict[str, Any],
+                 license: dict[str, Any],
+                 **kwargs: Any,
+                 ) -> None:
+        self.owner = User(**owner) if owner else None
+        self.license = License(**license) if license else None
+        super().__init__(**kwargs)
+
+
 @dataclass
-class Head:
+class _Head:
     label: str
     ref: str
     sha: str
-    user: User
-    repo: Repository
 
 
-# TODO: Redo init
+class Head(_Head):
+    def __init__(self, user: dict[str, Any],
+                 repo: dict[str, Any],
+                 **kwargs: Any,
+                 ) -> None:
+        self.user = User(**user) if user else None
+        self.repo = Repository(**repo) if repo else None
+        super().__init__(**kwargs)
+
+
 @dataclass
-class Base:
+class _Base:
     label: str
     ref: str
     sha: str
-    user: User
-    repo: Repository
+
+
+class Base(_Base):
+    def __init__(self, user: dict[str, Any],
+                 repo: dict[str, Any],
+                 **kwargs: Any,
+                 ) -> None:
+        self.user = User(**user) if user else None
+        self.repo = Repository(**repo) if repo else None
+        super().__init__(**kwargs)
 
 
 @dataclass
@@ -189,9 +200,8 @@ class Label:
     default: bool
 
 
-# TODO: Redo init
 @dataclass
-class Milestone:
+class _Milestone:
     url: str
     html_url: str
     labels_url: str
@@ -201,7 +211,6 @@ class Milestone:
     state: str
     title: str
     description: str
-    creator: User
     open_issues: int
     closed_issues: int
     created_at: str
@@ -210,9 +219,14 @@ class Milestone:
     due_on: str
 
 
-# TODO: Redo init
+class Milestone(_Milestone):
+    def __init__(self, creator: dict[str, Any], **kwargs: Any) -> None:
+        self.creator = User(**creator) if creator is not None else None
+        super().__init__(**kwargs)
+
+
 @dataclass
-class PR:
+class _PR:
     url: str
     id: int
     node_id: str
@@ -229,63 +243,122 @@ class PR:
     state: str
     locked: bool
     title: str
-    user: User
     body: str
-    labels: List[Label]
-    milestone: Milestone
     active_lock_reason: str
     created_at: str
     updated_at: str
     closed_at: str
     merged_at: str
     merge_commit_sha: str
-    assignee: User
-    assignees: List[User]
-    requested_reviewers: List[User]
-    requested_teams: List[Team]
-    head: Head
-    base: Base
     _links: dict[str, dict[str, str]]
     author_association: str
     auto_merge: Any
     draft: bool
 
 
+class PR(_PR):
+    def __init__(self,
+                 user: dict[str, Any],
+                 labels: List[dict[str, Any]],
+                 milestone: dict[str, Any],
+                 assignee: dict[str, Any],
+                 assignees: List[dict[str, Any]],
+                 requested_reviewers: List[dict[str, Any]],
+                 requested_teams: List[dict[str, Any]],
+                 head: dict[str, Any],
+                 base: dict[str, Any],
+                 **kwargs: Any,
+                 ) -> None:
+        self.user = User(**user)
+        self.labels = [Label(**x) for x in labels]
+        self.milestone = Milestone(**milestone) if milestone else None
+        self.assignee = User(**assignee) if assignee else None
+        self.assignees = [User(**x) for x in assignees]
+        self.requested_reviewers = [User(**x) for x in requested_reviewers]
+        self.requested_teams = [Team(**x) for x in requested_teams]
+        self.head = Head(**head) if head else None
+        self.base = Base(**base) if base else None
+        super().__init__(**kwargs)
+
+
 @dataclass
-class Issue:
-    # TODO
-    pass
+class _Issue:
+    id: int
+    node_id: str
+    url: str
+    repository_url: str
+    labels_url: str
+    comments_url: str
+    events_url: str
+    html_url: str
+    number: int
+    state: str
+    title: str
+    body: str
+    locked: bool
+    active_lock_reason: str
+    comments: int
+    closed_at: str
+    created_at: str
+    updated_at: str
+    author_association: str
+
+
+class Issue(_Issue):
+    def __init__(self,
+                 labels: List[dict[str, Any]],
+                 user: dict[str, Any],
+                 assignee: dict[str, Any],
+                 assignees: List[dict[str, Any]],
+                 milestone: dict[str, Any],
+                 pull_request: dict[str, Any],
+                 repository: dict[str, Any],
+                 **kwargs,
+                 ) -> None:
+        self.labels = [Label(**x) for x in labels]
+        self.user = User(**user) if user else None
+        self.assignee = User(**assignee) if assignee else None
+        self.assignees = [User(**x) for x in assignees]
+        self.milestone = Milestone(**milestone) if milestone else None
+        self.pull_request = PR(**pull_request) if pull_request else None
+        self.repository = Repository(**repository) if repository else None
+        super().__init__(**kwargs)
 
 
 def get_access_token() -> str:
     return CONFIG.get("master", "auth_token")
 
 
-def get_issues(repo: URL) -> List[Issue]:
-    pass
+HEADERS = {
+    "Accept": "application/vnd.github+json",
+    "Authorization": f"Bearer {get_access_token()}",
+    "X-GitHub-Api-Version": "2022-11-28",
+}
 
 
-def get_pull_requests(owner: str, repo: str) -> List[PR]:
-    url = f"https://api.github.com/repos/{owner}/{repo}/pulls"
-    headers = {
-        "Accept": "application/vnd.github+json",
-        "Authorization": f"Bearer {get_access_token()}",
-        "X-GitHub-Api-Version": "2022-11-28",
-    }
-
-    response = requests.get(url, headers=headers)
+def get_api_response(url: str) -> List[dict[str, Any]]:
+    response = requests.get(url, headers=HEADERS)
     response.raise_for_status()
 
     response_text = response.text
     response_text = response_text.replace("false", "False")
     response_text = response_text.replace("true", "True")
     response_text = response_text.replace("null", "None")
+    response_dicts = eval(response_text)
+    assert isinstance(response_dicts, list)
 
-    # TODO: Need a replacement for eval?
-    response_text = eval(response_text)
-    assert isinstance(response_text, list)
+    return response_dicts
 
-    for x in response_text:
-        assert isinstance(x, dict)
 
-    return [PR(**x) for x in response_text]
+def get_issues(owner: str, repo: str) -> List[Issue]:
+    url = f"https://api.github.com/repos/{owner}/{repo}/issues"
+    response_dicts = get_api_response(url)
+
+    return [Issue(**x) for x in response_dicts]
+
+
+def get_pull_requests(owner: str, repo: str) -> List[PR]:
+    url = f"https://api.github.com/repos/{owner}/{repo}/pulls"
+    response_dicts = get_api_response(url)
+
+    return [PR(**x) for x in response_dicts]
