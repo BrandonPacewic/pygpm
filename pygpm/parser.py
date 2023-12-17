@@ -69,7 +69,7 @@ TIME_COMMAND: Callable[..., Option] = partial(
     dest="time_command",
     action="store_true",
     default=False,
-    help="Adds a timer onto tho selected command and displays the total command runtime."
+    help="Adds a timer onto the selected command and displays the total command runtime."
 )
 
 GENERAL_GROUP: List[Callable[..., Option]] = [
