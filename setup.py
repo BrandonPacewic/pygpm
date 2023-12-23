@@ -37,7 +37,7 @@ def main() -> None:
                 "gpm=pygpm.__main__:main"
             ]
         },
-        python_requires=">=3.9",
+        python_requires=">=3.10",
         extras_require={
             "git": ["git"],
             "linting": [
