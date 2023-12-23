@@ -6,7 +6,7 @@ Data classes for storing GitHub API responses.
 """
 
 from dataclasses import dataclass
-from typing import Any, List
+from typing import Any, List, Optional
 
 
 @dataclass
@@ -38,6 +38,15 @@ class License:
     url: str
     spdx_id: str
     node_id: str
+
+
+@dataclass
+class Permissions:
+    admin: bool
+    maintain: bool
+    push: bool
+    triage: bool
+    pull: bool
 
 
 @dataclass
@@ -124,10 +133,42 @@ class _Repository:
 class Repository(_Repository):
     def __init__(self, owner: dict[str, Any],
                  license: dict[str, Any],
+                 permissions: Optional[dict[str, bool]] = None,
+                 temp_clone_token: Optional[str] = None,
+                 allow_squash_merge: Optional[bool] = None,
+                 allow_merge_commit: Optional[bool] = None,
+                 allow_rebase_merge: Optional[bool] = None,
+                 allow_auto_merge: Optional[bool] = None,
+                 delete_branch_on_merge: Optional[bool] = None,
+                 allow_update_branch: Optional[bool] = None,
+                 use_squash_pr_title_as_default: Optional[bool] = None,
+                 squash_merge_commit_message: Optional[str] = None,
+                 squash_merge_commit_title: Optional[str] = None,
+                 merge_commit_message: Optional[str] = None,
+                 merge_commit_title: Optional[str] = None,
+                 security_and_analysis: Optional[Any] = None,
+                 network_count: Optional[int] = None,
+                 subscribers_count: Optional[int] = None,
                  **kwargs: Any,
                  ) -> None:
         self.owner = User(**owner) if owner else None
         self.license = License(**license) if license else None
+        self.permissions = Permissions(**permissions) if permissions else None
+        self.temp_clone_token = temp_clone_token
+        self.allow_squash_merge = allow_squash_merge
+        self.allow_merge_commit = allow_merge_commit
+        self.allow_rebase_merge = allow_rebase_merge
+        self.allow_auto_merge = allow_auto_merge
+        self.delete_branch_on_merge = delete_branch_on_merge
+        self.allow_update_branch = allow_update_branch
+        self.use_squash_pr_title_as_default = use_squash_pr_title_as_default
+        self.squash_merge_commit_message = squash_merge_commit_message
+        self.squash_merge_commit_title = squash_merge_commit_title
+        self.merge_commit_message = merge_commit_message
+        self.merge_commit_title = merge_commit_title
+        self.security_and_analysis = security_and_analysis
+        self.network_count = network_count
+        self.subscribers_count = subscribers_count
         super().__init__(**kwargs)
 
 

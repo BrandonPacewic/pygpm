@@ -10,7 +10,7 @@ import requests
 from typing import Any, List
 
 from pygpm.config import CONFIG
-from pygpm.gh_classes import PR, Issue
+from pygpm.gh_classes import Repository, PR, Issue
 
 
 def get_access_token() -> str:
@@ -24,7 +24,7 @@ HEADERS = {
 }
 
 
-def get_api_response(url: str) -> List[dict[str, Any]]:
+def get_api_response(url: str) -> List[dict[str, Any]] | dict[str, Any]:
     response = requests.get(url, headers=HEADERS)
     response.raise_for_status()
 
@@ -33,7 +33,6 @@ def get_api_response(url: str) -> List[dict[str, Any]]:
     response_text = response_text.replace("true", "True")
     response_text = response_text.replace("null", "None")
     response_dicts = eval(response_text)
-    assert isinstance(response_dicts, list)
 
     return response_dicts
 
@@ -41,6 +40,7 @@ def get_api_response(url: str) -> List[dict[str, Any]]:
 def get_issues(owner: str, repo: str) -> List[Issue]:
     url = f"https://api.github.com/repos/{owner}/{repo}/issues"
     response_dicts = get_api_response(url)
+    assert isinstance(response_dicts, list)
 
     return [Issue(**x) for x in response_dicts]
 
@@ -48,5 +48,14 @@ def get_issues(owner: str, repo: str) -> List[Issue]:
 def get_pull_requests(owner: str, repo: str) -> List[PR]:
     url = f"https://api.github.com/repos/{owner}/{repo}/pulls"
     response_dicts = get_api_response(url)
+    assert isinstance(response_dicts, list)
 
     return [PR(**x) for x in response_dicts]
+
+
+def get_repository(owner: str, repo: str) -> Repository:
+    url = f"https://api.github.com/repos/{owner}/{repo}"
+    response = get_api_response(url)
+    assert isinstance(response, dict)
+
+    return Repository(**response)
