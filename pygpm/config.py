@@ -8,6 +8,8 @@ Holds all configurable options for pygpm.
 import configparser
 import os
 
+from typing import Any
+
 from pygpm.core import CONFIG_DIR, MODULE_DIR
 from pygpm.util import create_dir, copy_file
 
@@ -58,8 +60,8 @@ class Config:
         self.config.read_dict(CONFIG_DICT)
         self.config.read(self.config_path)
 
-    def get(self, section: str, option: str) -> str:
-        return self.config.get(section, option)
+    def get(self, section: str, option: str) -> Any:
+        return eval(self.config.get(section, option))
 
 
 CONFIG = Config()
